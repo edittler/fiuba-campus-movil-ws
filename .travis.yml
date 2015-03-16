@@ -1,0 +1,6 @@
+language: ruby
+rvm:
+  - 2.1
+
+before_script:
+  - mysql -e 'CREATE DATABASE fiuba_campus_movil_ws_test;'
