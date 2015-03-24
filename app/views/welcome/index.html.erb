@@ -1,1 +1,23 @@
-<h1>Hello, Rails!</h1>
+<% if user_signed_in? %>
+	<% content_for :title do %>Signed User<% end %>
+	<% content_for :head do %>
+		<meta name="authentication_token" content="<%= current_user.authentication_token %>"/>
+	<% end %>
+<% end %>
+
+<h1>
+	<% if user_signed_in?%>
+		Hello, <%= current_user.email %>
+	<% else %>
+		Hello, World!
+	<% end %>
+</h1>
+
+<h2>User Operations</h2>
+<p>
+	<% if user_signed_in? %>
+		<%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %>
+	<% else %>
+		<%= link_to 'Sign Up', new_user_registration_path %> | <%= link_to 'Login', new_user_session_path %>
+	<% end %>
+</p>
