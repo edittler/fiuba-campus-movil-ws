@@ -51,14 +51,14 @@ usuarios:
 ```sql
 CREATE USER dev;
 CREATE USER travis;
-CREATE USER fiuba-campus-movil-ws;
+CREATE USER fiuba;
 ```
 Para otorgar los permisos a cada usuario para manipular la base de datos creada
 con el comando anterior, ejecutar los comandos:
 ```sql
 GRANT ALL PRIVILEGES ON fiuba_campus_movil_ws_development.* TO 'dev'@'%';
 GRANT ALL PRIVILEGES ON fiuba_campus_movil_ws_test.* TO 'travis'@'%';
-GRANT ALL PRIVILEGES ON fiuba_campus_movil_ws_production.* TO 'fiuba-campus-movil-ws'@'%';
+GRANT ALL PRIVILEGES ON fiuba_campus_movil_ws_production.* TO 'fiuba'@'%';
 FLUSH PRIVILEGES;
 ```
 Para salir del modo interactivo de MySQL, simplemente escribir `exit`.
@@ -92,7 +92,7 @@ rvm use 2.1 --default
 
 Ahora se procede a instalar el Bundler con el siguente comando:
 ```bash
-gem install bundle
+gem install bundler
 ```
 
 ### Inicialización del proyecto
