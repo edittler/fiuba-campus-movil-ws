@@ -65,8 +65,10 @@ Rails.application.routes.draw do
   namespace :api, :defaults => { :format => 'json' } do
 
     namespace :users do
+      #get 'sign_up' => 'registrations#new'
       post 'sign_up' => 'registrations#create'
-      post 'sign_in' => 'sessions#create'
+      #get 'sign_in' => 'sessions#new'
+      post 'sign_in' => 'sessions#create', :as => :session
       delete 'sign_out' => 'sessions#destroy'
       post 'password' => 'passwords#create'
     end
