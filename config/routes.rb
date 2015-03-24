@@ -62,4 +62,15 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
+  namespace :api, :defaults => { :format => 'json' } do
+
+    namespace :users do
+      post 'sign_up' => 'registrations#create'
+      post 'sign_in' => 'sessions#create'
+      delete 'sign_out' => 'sessions#destroy'
+      post 'password' => 'passwords#create'
+    end
+
+  end
+
 end
