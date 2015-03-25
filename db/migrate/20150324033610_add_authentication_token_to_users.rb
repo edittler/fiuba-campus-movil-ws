@@ -4,7 +4,7 @@ class AddAuthenticationTokenToUsers < ActiveRecord::Migration
       t.string :authentication_token
     end
 
-    add_index  :users, :authentication_token, :unique => true
+    add_index  :users, :authentication_token, unique: true
   end
 
   def down
