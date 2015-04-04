@@ -2,5 +2,9 @@ language: ruby
 rvm:
   - 2.1
 
+addons:
+  postgresql: "9.3"
+
 before_script:
-  - mysql -e 'CREATE DATABASE fiuba_campus_movil_ws_test;'
+  - psql -c 'create database fiuba_campus_movil_ws_test;' -U postgres
+  - cp config/database.yml.travis config/database.yml

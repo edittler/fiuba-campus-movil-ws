@@ -26,10 +26,11 @@ postgres@laptop:~$
 Crear los users necesarios con los siguientes comandos:
 ```bash
 postgres@laptop:~$ createuser development --createdb
+postgres@laptop:~$ createuser test --createdb
 ```
 
 Una vez creados los users, se debe realizar unos ajustes a la configuración de
-Postgre. Se procede a editar el documento gp_hba.conf:
+Postgre. Se procede a editar el documento `gp_hba.conf`:
 ``` bash
 postgres@laptop:~$ nano /etc/postgresql/9.3/main/pg_hba.conf
 ```
