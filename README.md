@@ -4,64 +4,68 @@
 Web service y backend administrativo de FIUBA Campus Móvil
 
 ## Requisitos
-* MySQL
-* Ruby 2.1.x
+* PostgreSQL 8.2 o superior
+* Ruby 2.1.5
 * *gema* Bundler
 
 ## Configuración del ambiente
-### SQL
-En sistemas operativos basados en Debian, se deberá instalar MySQL con el
+### PostgreSQL
+La versión requerida de PostgreSQL para Rails es 8.2 o superior.
+En sistemas operativos basados en Debian, se deberá instalar PostgreSQL con el
 siguiente comando:
 ```bash
-sudo apt-get install mysql-server mysql-client
+user@laptop:~$ sudo apt-get install postgresql postgresql-contrib
 ```
-Durante el proceso de instalación se le pedirá que ingrese una contraseña para
-el usuario root de MySQL. ¡No olvidarla!
 
-Una vez finalizada la instalación, el servidor MySQL se inicia automáticamente.
-Para verificar si el servidor se encuentra corriendo, puede ejecutar el
+Cambiar al usuario PostgreSQL con el siguiente comando
+```bash
+user@laptop:~$ sudo su - postgres
+postgres@laptop:~$
+```
+
+Crear los users necesarios con los siguientes comandos:
+```bash
+postgres@laptop:~$ createuser development --createdb
+```
+
+Una vez creados los users, se debe realizar unos ajustes a la configuración de
+Postgre. Se procede a editar el documento gp_hba.conf:
+``` bash
+postgres@laptop:~$ nano /etc/postgresql/9.3/main/pg_hba.conf
+```
+
+Para la conexión local de sockets Unix se debe reemplazar el método "peer" a
+"trust", quedando el documento de la siguiente manera:
+```
+# Database administrative login by Unix domain socket
+local   all             postgres                                peer
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     trust
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            md5
+# IPv6 local connections:
+host    all             all             ::1/128                 md5
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+#local   replication     postgres                                peer
+#host    replication     postgres        127.0.0.1/32            md5
+#host    replication     postgres        ::1/128                 md5
+```
+
+Salir del usuario tipeando "logout":
+```bash
+postgres@laptop:~$ logout
+user@laptop:~$
+```
+Una vez que haya regresado al propio usuario se debe reiniciar el servidor
+PostgreSQL para que surta efecto el cambio de configuración ejecutando el
 siguiente comando:
 ```bash
-sudo netstat -tap | grep mysql
+user@laptop:~$ sudo service postgresql restart
 ```
-Cuando ejecuta el comando, se puede ver una salida similar a la siguiente:
-```
-tcp        0      0 localhost:mysql         *:*                LISTEN      2556/mysqld
-```
-Si el servidor no está corriendo, puede utilizar este comando para iniciarlo:
-```bash
-sudo service mysql restart
-```
-Ahora se crearán las bases de datos de desarrollo, pruebas y producción y sus
-correspondientes usuarios para que Rails pueda acceder a la base de datos.
-Procedemos iniciar el modo interactivo de MySQL con el siguiente comando:
-```bash
-mysql -u root -p
-```
-Luego de ingresar la contraseña que configuró durante la instalación, se abrirá
-el modo interactivo. Para crear las bases de datos ejecutar los siguientes
-comandos:
-```sql
-CREATE DATABASE fiuba_campus_movil_ws_development;
-CREATE DATABASE fiuba_campus_movil_ws_test;
-CREATE DATABASE fiuba_campus_movil_ws_production;
-```
-A continuación, ejecutar los siguientes comandos para crear los respectivos
-usuarios:
-```sql
-CREATE USER dev;
-CREATE USER travis;
-CREATE USER fiuba;
-```
-Para otorgar los permisos a cada usuario para manipular la base de datos creada
-con el comando anterior, ejecutar los comandos:
-```sql
-GRANT ALL PRIVILEGES ON fiuba_campus_movil_ws_development.* TO 'dev'@'%';
-GRANT ALL PRIVILEGES ON fiuba_campus_movil_ws_test.* TO 'travis'@'%';
-GRANT ALL PRIVILEGES ON fiuba_campus_movil_ws_production.* TO 'fiuba'@'%';
-FLUSH PRIVILEGES;
-```
-Para salir del modo interactivo de MySQL, simplemente escribir `exit`.
 
 ### Ruby
 Dado que el gestor de paquetes de los sistemas operativos basados en Debian
@@ -103,10 +107,16 @@ comando:
 bundle install
 ```
 
-Luego de instalar las dependencias necesarias para el proyecto, se procede a 
+Luego de instalar las dependencias necesarias para el proyecto, se procede a
 inicializar las bases de datos ejecutando el siguiente comando:
 ```bash
 bundle exec rake db:migrate
+```
+
+En caso de que la base de datos ya se encuentre inicializada y se quiera
+"limpiarla", ejecutar el siguiente comando:
+```bash
+bundle exec rake db:reset
 ```
 
 Ahora puede correr el servidor y utilizar el web service de este proyecto
