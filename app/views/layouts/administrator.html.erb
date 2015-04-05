@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title><%= content_for?(:title) ? yield(:title) : "FIUBA Campus Móvil WS" %></title>
+    <title><%= content_for?(:title) ? yield(:title) : "FIUBA Campus Móvil Administrador" %></title>
 
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "vendor/modernizr" %>
@@ -15,7 +15,9 @@
 
   <body>
 
-    <div class="row full-width">
+    <%= render "admin/topbar" %>
+
+    <div class="row full-width" id="content">
       <div class="small-12 columns">
         <%= yield %>
       </div>

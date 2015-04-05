@@ -7,7 +7,20 @@ class ApplicationController < ActionController::Base
   # This is Devise's authentication
   #before_filter :authenticate_user!
 
+  protected
+
+    # Custom redirect path
+    def after_sign_out_path_for(resource)
+      logger.debug "[LOGOUT]: #{resource} #{resource.class}"
+      if resource == 'admin'
+        admin_path
+      else
+        super
+      end
+    end
+
   private
+
     # For this example, we are simply using token authentication
     # via parameters. However, anyone could use Rails's token
     # authentication features to get the token from a header.

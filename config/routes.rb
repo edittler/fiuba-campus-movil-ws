@@ -62,12 +62,25 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
+  devise_for :admins, controllers: {
+    sessions: 'admins/sessions',
+    passwords: 'admins/passwords',
+    registrations: 'admins/registrations'
+  }
+
+  get 'admin', to: 'admin#index', as: :admin_root
+
+  namespace :admin do
+    get 'sign_in' => 'sessions#new'
+    post 'sign_in' => 'sessions#create'
+    delete 'sign_out' => 'sessions#destroy'
+  end
+
+
   namespace :api, :defaults => { :format => 'json' } do
 
     namespace :users do
-      #get 'sign_up' => 'registrations#new'
       post 'sign_up' => 'registrations#create'
-      #get 'sign_in' => 'sessions#new'
       post 'sign_in' => 'sessions#create', :as => :session
       delete 'sign_out' => 'sessions#destroy'
       post 'password' => 'passwords#create'
