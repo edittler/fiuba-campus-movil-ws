@@ -1,0 +1,21 @@
+<h1>Usuarios de FIUBA Campus Móvil</h1>
+
+<%= link_to 'Nuevo usuario', new_admin_user_path %>
+
+<table>
+  <tr>
+    <th>Correo Electrónico</th>
+    <th>Ultima conexión</th>
+    <th colspan="2"></th>
+  </tr>
+
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= user.email %></td>
+      <td><%= user.last_sign_in_at %></td>
+      <td><%= link_to 'Ver', admin_user_path(user) %></td>
+      <!--<td><%= link_to 'Editar', edit_admin_user_path(user) %></td>
+      <td><%= link_to 'Eliminar', admin_user_path(user), method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
+    </tr>
+  <% end %>
+</table>

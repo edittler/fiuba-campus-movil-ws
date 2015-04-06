@@ -1,0 +1,6 @@
+<h1>Detalle de Usuario</h1>
+<p><b>Correo electrónico:</b> <%= @user.email %></p>
+<p><b>Ultima conexión:</b> <%= @user.last_sign_in_at%></p>
+
+<%= link_to 'Regresar a usuarios', admin_users_path %> |
+<%= link_to 'Editar usuario', edit_admin_user_path(@user) %>

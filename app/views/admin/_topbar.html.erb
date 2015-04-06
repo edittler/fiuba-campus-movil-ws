@@ -27,7 +27,7 @@
       <!-- Left Nav Section -->
       <ul class="left">
         <% if admin_signed_in?%>
-          <li><a href="#">Usuarios</a></li>
+          <li><%= link_to 'Usuarios', admin_users_path %></li>
         <% end %>
       </ul>
     </section>
