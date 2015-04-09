@@ -14,7 +14,7 @@ La versión requerida de PostgreSQL para Rails es 8.2 o superior.
 En sistemas operativos basados en Debian, se deberá instalar PostgreSQL con el
 siguiente comando:
 ```bash
-user@laptop:~$ sudo apt-get install postgresql postgresql-contrib
+user@laptop:~$ sudo apt-get install postgresql postgresql-contrib libpq-dev
 ```
 
 Cambiar al usuario PostgreSQL con el siguiente comando
