@@ -57,14 +57,14 @@ Rails.application.routes.draw do
   #   end
 
   devise_for :users, controllers: {
-    sessions: 'users/sessions',
-    passwords: 'users/passwords',
+    sessions:      'users/sessions',
+    passwords:     'users/passwords',
     registrations: 'users/registrations'
   }
 
   devise_for :admins, controllers: {
-    sessions: 'admins/sessions',
-    passwords: 'admins/passwords',
+    sessions:      'admins/sessions',
+    passwords:     'admins/passwords',
     registrations: 'admins/registrations'
   }
 
@@ -81,10 +81,14 @@ Rails.application.routes.draw do
   namespace :api, :defaults => { :format => 'json' } do
 
     namespace :users do
-      post 'sign_up' => 'registrations#create'
-      post 'sign_in' => 'sessions#create', :as => :session
+      post   'sign_up'  => 'registrations#create'
+      post   'sign_in'  => 'sessions#create',      :as => :session
       delete 'sign_out' => 'sessions#destroy'
-      post 'password' => 'passwords#create'
+      post   'password' => 'passwords#create'
+    end
+
+    namespace :friends do
+      post 'add_friend' => 'friendships#add_friend'
     end
 
   end
