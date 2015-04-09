@@ -4,11 +4,13 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_and_belongs_to_many :friends,
-      class_name: "User",
-      :join_table => "friendships",
-      foreign_key: "this_user_id",
-      association_foreign_key: "other_user_id",
+  # Friendship model relation
+  has_many :friendships, foreign_key: "this_user_id", dependent: :destroy
+  has_many :reverse_friendships, class_name: "Friendship",
+      foreign_key: "other_user_id", dependent: :destroy
+
+  # Friends model
+  has_many :friends, through: :friendships, source: :other_user,
       after_add:    :create_complement_friendship,
       after_remove: :remove_complement_friendship
 
