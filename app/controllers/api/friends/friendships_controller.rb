@@ -15,4 +15,5 @@ class Api::Friends::FriendshipsController < ApplicationController
       render status: :ok, json: { result: "ok", message: "Friens added" }
     #end
   end
+
 end

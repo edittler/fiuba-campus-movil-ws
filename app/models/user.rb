@@ -4,12 +4,18 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  # Friendship Request model relation
+  has_many :sent_friendship_requests, class_name: "FriendshipRequest",
+      foreign_key: "sender_user_id", dependent: :destroy
+  has_many :received_friendship_requests, class_name: "FriendshipRequest",
+      foreign_key: "receiver_user_id", dependent: :destroy
+
   # Friendship model relation
   has_many :friendships, foreign_key: "this_user_id", dependent: :destroy
   has_many :reverse_friendships, class_name: "Friendship",
       foreign_key: "other_user_id", dependent: :destroy
 
-  # Friends model
+  # Friends model relation
   has_many :friends, through: :friendships, source: :other_user,
       after_add:    :create_complement_friendship,
       after_remove: :remove_complement_friendship
@@ -24,6 +30,7 @@ class User < ActiveRecord::Base
   end
 
   private
+
     def generate_authentication_token
       loop do
         token = Devise.friendly_token

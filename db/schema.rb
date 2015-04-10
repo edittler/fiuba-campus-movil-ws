@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150409112126) do
+ActiveRecord::Schema.define(version: 20150410122014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,16 @@ ActiveRecord::Schema.define(version: 20150409112126) do
 
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
+
+  create_table "friendship_requests", force: :cascade do |t|
+    t.integer  "sender_user_id",   null: false
+    t.integer  "receiver_user_id", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "friendship_requests", ["receiver_user_id"], name: "index_friendship_requests_on_receiver_user_id", using: :btree
+  add_index "friendship_requests", ["sender_user_id"], name: "index_friendship_requests_on_sender_user_id", using: :btree
 
   create_table "friendships", force: :cascade do |t|
     t.integer  "this_user_id",  null: false
