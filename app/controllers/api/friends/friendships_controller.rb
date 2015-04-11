@@ -1,5 +1,22 @@
 class Api::Friends::FriendshipsController < Api::ApiController
 
+  def show
+    unless exists_user_token_param(params)
+      render_missing_user_token_parameter
+      return
+    end
+
+    user = User.find_by(authentication_token: params[:user_token])
+
+    if user.nil?
+      render_invalid_user_token
+      return
+    end
+
+    @friends = User.all
+    render status: :ok
+  end
+
   def add_friend
     logger.debug "[API] Add Friend: #{params}"
     @user = User.find(params[:user_id])

@@ -39,7 +39,7 @@ class Api::Users::SessionsController < Api::ApiController
     user = User.find_by(authentication_token: params[:user_token])
 
     if user.nil?
-      render status: :not_found, json: { message: 'Invalid token' }
+      render status: :not_found, json: { result: "error", message: 'Invalid token' }
     else
       user.authentication_token = nil
       user.save!
