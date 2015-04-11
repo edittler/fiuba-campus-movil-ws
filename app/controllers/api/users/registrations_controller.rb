@@ -1,5 +1,4 @@
-class Api::Users::RegistrationsController < ApplicationController
-  skip_before_filter :verify_authenticity_token
+class Api::Users::RegistrationsController < Api::ApiController
 
   # POST /api/users/sign_up
   def create

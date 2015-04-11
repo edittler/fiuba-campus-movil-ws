@@ -1,6 +1,4 @@
-class Api::Friends::FriendshipsController < ApplicationController
-  skip_before_filter :verify_authenticity_token
-  respond_to :json
+class Api::Friends::FriendshipsController < Api::ApiController
 
   def add_friend
     logger.debug "[API] Add Friend: #{params}"
