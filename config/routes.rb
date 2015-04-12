@@ -84,6 +84,7 @@ Rails.application.routes.draw do
       post   'sign_in'  => 'sessions#create',      :as => :session
       delete 'sign_out' => 'sessions#destroy'
       post   'password' => 'passwords#create'
+      get    ':id'      => 'profile#show'
     end
 
     namespace :friends do

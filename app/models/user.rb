@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  has_one :profile, dependent: :destroy
+
   # Friendship Request model relation
   has_many :sent_friendship_requests, class_name: "FriendshipRequest",
       foreign_key: "sender_user_id", dependent: :destroy
@@ -19,8 +21,6 @@ class User < ActiveRecord::Base
   has_many :friends, through: :friendships, source: :other_user,
       after_add:    :create_complement_friendship,
       after_remove: :remove_complement_friendship
-
-  has_one :profile,dependent: :destroy
 
   # You likely have this before callback set up for the token.
   before_save :ensure_authentication_token
