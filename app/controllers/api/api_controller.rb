@@ -1,7 +1,8 @@
 class Api::ApiController < ApplicationController
-  skip_before_filter :verify_authenticity_token
-  before_filter :verify_json_request_format
-  before_filter :underscore_key_json_params!
+  skip_before_action :verify_authenticity_token
+  before_action :verify_json_request_format
+  before_action :underscore_key_json_params!
+  before_action :verify_user_token
   respond_to :json
 
   protected
@@ -29,12 +30,21 @@ class Api::ApiController < ApplicationController
       end
     end
 
-    def exists_user_token_param(params)
-      return !params[:user_token].nil?
+    def verify_user_token
+      if params[:user_token].nil?
+        render_missing_user_token_parameter
+        return
+      end
+
+      user = User.find_by_authentication_token(params[:user_token])
+      if user.nil?
+        render_invalid_user_token
+        return
+      end
     end
 
     def render_missing_user_token_parameter
-      render status: :not_found, json: { result: "error", message: "Missing userToken parameter" }
+      render status: :bad_request, json: { result: "error", message: "Missing userToken parameter" }
     end
 
     def render_invalid_user_token

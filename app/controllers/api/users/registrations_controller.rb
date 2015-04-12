@@ -1,4 +1,5 @@
 class Api::Users::RegistrationsController < Api::ApiController
+  skip_before_action :verify_user_token, only: [:create]
 
   # POST /api/users/sign_up
   def create
