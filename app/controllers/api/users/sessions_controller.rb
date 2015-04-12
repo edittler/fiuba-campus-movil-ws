@@ -13,14 +13,12 @@ class Api::Users::SessionsController < Api::ApiController
     end
 
     # Authentication
-    user = User.find_by_email(email)
+    @user = User.find_by_email(email)
 
-    if user
-      if user.valid_password? password
-        user.restore_authentication_token!
-        # Note that the data which should be returned depends heavily of the API client needs.
-        render status: :ok,
-               json: { result: "ok", message: "Sign in success", user_token: user.authentication_token }
+    if @user
+      if @user.valid_password? password
+        @user.restore_authentication_token!
+        render status: :ok
       else
         render status: :unauthorized,
                json: { result: "error", message: "Invalid email or password" }

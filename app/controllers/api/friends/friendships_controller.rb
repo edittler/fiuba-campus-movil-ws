@@ -1,5 +1,6 @@
 class Api::Friends::FriendshipsController < Api::ApiController
 
+  # GET /api/friends
   def show
     unless exists_user_token_param(params)
       render_missing_user_token_parameter
