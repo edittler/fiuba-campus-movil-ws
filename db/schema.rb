@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150410122014) do
+ActiveRecord::Schema.define(version: 20150412203659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,30 @@ ActiveRecord::Schema.define(version: 20150410122014) do
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
 
+  create_table "cities", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "date_intervals", force: :cascade do |t|
+    t.datetime "init"
+    t.datetime "end"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "job_id"
+  end
+
+  add_index "date_intervals", ["job_id"], name: "index_date_intervals_on_job_id", using: :btree
+
+  create_table "educations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "profile_id"
+  end
+
+  add_index "educations", ["profile_id"], name: "index_educations_on_profile_id", using: :btree
+
   create_table "friendship_requests", force: :cascade do |t|
     t.integer  "sender_user_id",   null: false
     t.integer  "receiver_user_id", null: false
@@ -54,6 +78,67 @@ ActiveRecord::Schema.define(version: 20150410122014) do
   add_index "friendships", ["other_user_id"], name: "index_friendships_on_other_user_id", using: :btree
   add_index "friendships", ["this_user_id"], name: "index_friendships_on_this_user_id", using: :btree
 
+  create_table "institutes", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "jobs", force: :cascade do |t|
+    t.string   "company"
+    t.string   "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "profile_id"
+  end
+
+  add_index "jobs", ["profile_id"], name: "index_jobs_on_profile_id", using: :btree
+
+  create_table "locations", force: :cascade do |t|
+    t.string   "latitude"
+    t.string   "longitude"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "profile_id"
+  end
+
+  add_index "locations", ["profile_id"], name: "index_locations_on_profile_id", using: :btree
+
+  create_table "nationalities", force: :cascade do |t|
+    t.string   "nationality"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "phones", force: :cascade do |t|
+    t.string   "type"
+    t.string   "number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "profile_id"
+  end
+
+  add_index "phones", ["profile_id"], name: "index_phones_on_profile_id", using: :btree
+
+  create_table "profiles", force: :cascade do |t|
+    t.string   "biography"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "nationality_id"
+    t.integer  "city_id"
+    t.integer  "phone_id"
+    t.integer  "location_id"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.integer  "user_id"
+  end
+
+  add_index "profiles", ["city_id"], name: "index_profiles_on_city_id", using: :btree
+  add_index "profiles", ["location_id"], name: "index_profiles_on_location_id", using: :btree
+  add_index "profiles", ["nationality_id"], name: "index_profiles_on_nationality_id", using: :btree
+  add_index "profiles", ["phone_id"], name: "index_profiles_on_phone_id", using: :btree
+  add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
     t.string   "encrypted_password",     limit: 255, default: "", null: false
@@ -68,10 +153,23 @@ ActiveRecord::Schema.define(version: 20150410122014) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "authentication_token",   limit: 255
+    t.integer  "profile_id"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["profile_id"], name: "index_users_on_profile_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "date_intervals", "jobs"
+  add_foreign_key "educations", "profiles"
+  add_foreign_key "jobs", "profiles"
+  add_foreign_key "locations", "profiles"
+  add_foreign_key "phones", "profiles"
+  add_foreign_key "profiles", "cities"
+  add_foreign_key "profiles", "locations"
+  add_foreign_key "profiles", "nationalities"
+  add_foreign_key "profiles", "phones"
+  add_foreign_key "profiles", "users"
+  add_foreign_key "users", "profiles"
 end

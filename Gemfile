@@ -38,6 +38,8 @@ gem 'foundation-rails'
 # Use Devise authentication rails engine
 gem 'devise'
 
+gem 'annotate', '~> 2.6.6'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
@@ -56,6 +58,8 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  gem 'rails-erd'
 end
 
 group :production do

@@ -18,8 +18,9 @@ class Api::Users::RegistrationsController < Api::ApiController
     end
 
     # Create user
-    user = User.new(user_params)
+    user = User.new( user_params() )
     if user.save
+      user.create_profile()
       render status: :created,
             json: { result: "ok", message: "User has been created" }
       return
@@ -41,5 +42,10 @@ class Api::Users::RegistrationsController < Api::ApiController
       logger.debug "[API] User Params #{params}"
       params.require(:registration).permit(:email, :password)
     end
+
+   # def profile_params
+   #   logger.debug "[API] Profile Params #{params}"
+    #  params.require(:registration).permit(:email, :password)
+    #end
 
 end
