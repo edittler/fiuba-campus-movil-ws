@@ -19,32 +19,31 @@ class Api::Users::SessionsController < Api::ApiController
     if @user
       if @user.valid_password? password
         @user.restore_authentication_token!
+        # Render JSON in JBuilder.
+        # See /app/views/api/users/sessions/create.json.jbuilder
         render status: :ok
       else
-        render status: :unauthorized,
-               json: { result: "error", message: "Invalid email or password" }
+        render_invalid_email_or_password
       end
     else
-      render status: :unauthorized,
-             json: { result: "error", message: "Invalid email or password" }
+      render_invalid_email_or_password
     end
   end
 
   # DELETE /api/users/sign_out
   def destroy
-    #TODO Validate required parameters
-    logger.debug "[API] Session Destroy: #{params}"
-    # Fetch params
-    user = User.find_by(authentication_token: params[:user_token])
-
-    if user.nil?
-      render status: :not_found, json: { result: "error", message: 'Invalid token' }
-    else
-      user.authentication_token = nil
-      user.save!
-      render status: :ok,
-             json: { result: "ok", message: "Sign out succes" }
-    end
+    user = User.find_by_authentication_token(params[:user_token])
+    user.authentication_token = nil
+    user.save!
+    render status: :ok,
+           json: { result: "ok", message: "Sign out succes" }
   end
+
+  private
+
+    def render_invalid_email_or_password
+      render status: :unauthorized,
+             json: { result: "error", message: "Invalid email or password" }
+    end
 
 end
