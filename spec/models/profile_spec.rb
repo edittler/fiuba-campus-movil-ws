@@ -12,6 +12,7 @@
 #  location_id    :integer
 #  first_name     :string
 #  last_name      :string
+#  user_id        :integer
 #
 # Indexes
 #
@@ -19,6 +20,7 @@
 #  index_profiles_on_location_id     (location_id)
 #  index_profiles_on_nationality_id  (nationality_id)
 #  index_profiles_on_phone_id        (phone_id)
+#  index_profiles_on_user_id         (user_id)
 #
 
 require 'rails_helper'
