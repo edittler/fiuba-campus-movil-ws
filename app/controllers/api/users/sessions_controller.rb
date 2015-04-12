@@ -3,15 +3,13 @@ class Api::Users::SessionsController < Api::ApiController
 
   # POST /api/users/sign_in
   def create
-    # Fetch params
-    email = params[:session][:email]
-    password = params[:session][:password]
-
-    if email.nil? or password.nil?
-      render status: :bad_request,
-             json: { result: "error", message: "Missing required parameters" }
+    unless exists_create_required_params
+      render_missing_required_params
       return
     end
+
+    email = params[:session][:email]
+    password = params[:session][:password]
 
     # Authentication
     @user = User.find_by_email(email)
@@ -40,6 +38,11 @@ class Api::Users::SessionsController < Api::ApiController
   end
 
   private
+
+    def exists_create_required_params
+      session_params = params[:session]
+      return !( session_params[:email].nil? or session_params[:password].nil? )
+    end
 
     def render_invalid_email_or_password
       render status: :unauthorized,

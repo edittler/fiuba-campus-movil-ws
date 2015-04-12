@@ -44,11 +44,18 @@ class Api::ApiController < ApplicationController
     end
 
     def render_missing_user_token_parameter
-      render status: :bad_request, json: { result: "error", message: "Missing userToken parameter" }
+      render status: :bad_request,
+             json: { result: "error", message: "Missing userToken parameter" }
     end
 
     def render_invalid_user_token
-      render status: :not_found, json: { result: "error", message: "Invalid userToken" }
+      render status: :not_found,
+             json: { result: "error", message: "Invalid userToken" }
+    end
+
+    def render_missing_required_params
+      render status: :bad_request,
+             json: { result: "error", message: "Missing required parameters" }
     end
 
 end
