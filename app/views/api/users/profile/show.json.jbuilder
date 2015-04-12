@@ -21,7 +21,7 @@ json.data do
     json.city  @city || ""
     json.phone do
       json.type    @user.profile.try(:phone).try(:type) || ""
-      json.phone  @user.profile.try(:phone).try(:phone) || ""
+      json.number  @user.profile.try(:phone).try(:phone) || ""
     end
 
     json.jobs(@jobs) do |json, job|
