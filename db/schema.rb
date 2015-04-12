@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150412144536) do
+ActiveRecord::Schema.define(version: 20150412175920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,7 +115,6 @@ ActiveRecord::Schema.define(version: 20150412144536) do
   add_index "phones", ["profile_id"], name: "index_phones_on_profile_id", using: :btree
 
   create_table "profiles", force: :cascade do |t|
-    t.string   "name"
     t.string   "biography"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
@@ -123,6 +122,8 @@ ActiveRecord::Schema.define(version: 20150412144536) do
     t.integer  "city_id"
     t.integer  "phone_id"
     t.integer  "location_id"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "profiles", ["city_id"], name: "index_profiles_on_city_id", using: :btree

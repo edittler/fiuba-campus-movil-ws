@@ -9,6 +9,10 @@
 #  updated_at :datetime         not null
 #  profile_id :integer
 #
+# Indexes
+#
+#  index_jobs_on_profile_id  (profile_id)
+#
 
 require 'rails_helper'
 

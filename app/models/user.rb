@@ -18,6 +18,13 @@
 #  authentication_token   :string(255)
 #  profile_id             :integer
 #
+# Indexes
+#
+#  index_users_on_authentication_token  (authentication_token) UNIQUE
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_profile_id            (profile_id)
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#
 
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:

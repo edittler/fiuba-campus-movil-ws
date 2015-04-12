@@ -7,6 +7,10 @@
 #  updated_at :datetime         not null
 #  profile_id :integer
 #
+# Indexes
+#
+#  index_educations_on_profile_id  (profile_id)
+#
 
 require 'rails_helper'
 

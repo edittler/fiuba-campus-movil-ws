@@ -3,7 +3,6 @@
 # Table name: profiles
 #
 #  id             :integer          not null, primary key
-#  name           :string
 #  biography      :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
@@ -11,6 +10,15 @@
 #  city_id        :integer
 #  phone_id       :integer
 #  location_id    :integer
+#  first_name     :string
+#  last_name      :string
+#
+# Indexes
+#
+#  index_profiles_on_city_id         (city_id)
+#  index_profiles_on_location_id     (location_id)
+#  index_profiles_on_nationality_id  (nationality_id)
+#  index_profiles_on_phone_id        (phone_id)
 #
 
 require 'rails_helper'
