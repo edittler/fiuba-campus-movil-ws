@@ -7,6 +7,11 @@
 #  end        :datetime
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  job_id     :integer
+#
+# Indexes
+#
+#  index_date_intervals_on_job_id  (job_id)
 #
 
 require 'rails_helper'
