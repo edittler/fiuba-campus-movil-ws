@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: nationalities
+#
+#  id          :integer          not null, primary key
+#  nationality :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 require 'rails_helper'
 
 RSpec.describe Nationality, type: :model do
