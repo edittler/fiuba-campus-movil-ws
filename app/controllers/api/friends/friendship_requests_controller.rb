@@ -2,20 +2,6 @@ class Api::Friends::FriendshipRequestsController < Api::ApiController
 
   # POST /api/friends/send_friendship_request
   def create
-    logger.debug "[API] Create Friendship Request Params: #{params}"
-    #user = User.find(params[:user_id])
-    #logger.debug "[API] Sender User: #{user.attributes.inspect}"
-    #invited_user = User.find(params[:invited_user_id])
-    #logger.debug "[API] Invited User: #{invited_user.attributes.inspect}"
-    #request_params = { sender_user_id:   user.id,
-    #                   receiver_user_id: invited_user.id }
-    #request = FriendshipRequest.new(request_params)
-    #logger.debug "[API] Friendship Request: #{request}"
-
-    #if request.save
-    #  render status: :ok, json: { result: "ok", message: "Frienship Request Sent" }
-    #end
-
     unless exists_create_required_params
       render_missing_required_params
       return
@@ -50,10 +36,37 @@ class Api::Friends::FriendshipRequestsController < Api::ApiController
            json: { result: "ok", message: "Frienship request sent" }
   end
 
+# POST /api/friends/respond_friendship_request
+  def reply
+    unless exists_reply_required_params
+      render_missing_required_params
+      return
+    end
+
+    unless FriendshipRequest.exists?(params[:friendship_request_id])
+      render status: :not_found,
+             json: { result: "error", message: "Friendship request no exists" }
+      return
+    end
+
+    user = User.find_by_authentication_token(params[:user_token])
+    logger.debug "[API] User sender: #{user.attributes.inspect}"
+
+    friendship_request = FriendshipRequest.find(params[:friendship_request_id])
+
+    render status: :ok,
+           json: { result: "ok", message: "okkkk" }
+
+  end
+
   private
 
     def exists_create_required_params
       return ( !params[:user_to_invite_id].nil? )
+    end
+
+    def exists_reply_required_params
+      return !( params[:friendship_request_id].nil? or params[:friendship_request_response].nil? )
     end
 
 end
