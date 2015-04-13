@@ -30,27 +30,27 @@ class Api::Users::ProfileController < Api::ApiController
 
     profileUpdates = params[:data][:profile]
 
-    @profile.first_name = profileUpdates[:first_name]
-    @profile.last_name = profileUpdates[:last_name]
-    @profile.biography = profileUpdates[:biography]
+    @profile.first_name = profileUpdates[:first_name] unless profileUpdates[:first_name].nil?
+    @profile.last_name = profileUpdates[:last_name] unless profileUpdates[:last_name].nil?
+    @profile.biography = profileUpdates[:biography] unless profileUpdates[:biography].nil?
     @profile.save
 
     @nationality = Nationality.find_by!( profile_id: @profile.id )
-    @nationality.nationality = profileUpdates[:nationality]
+    @nationality.nationality = profileUpdates[:nationality] unless profileUpdates[:nationality].nil?
     @nationality.save
 
     @city = City.find_by!( profile_id: @profile.id )
-    @city.name = profileUpdates[:city]
+    @city.name = profileUpdates[:city] unless profileUpdates[:city].nil?
     @city.save
 
     @phone = Phone.find_by!( profile_id: @profile.id )
-    @phone.number = profileUpdates[:phone]
+    @phone.number = profileUpdates[:phone] unless profileUpdates[:phone].nil?
     @phone.save
 
     @jobs = Job.find_by( profile_id: @profile.id )
 
     @academic_info = AcademicInfo.find_by!( user_id: params[:id].to_i )
-    @academic_info.padron = profileUpdates[:padron]
+    @academic_info.padron = profileUpdates[:padron] unless profileUpdates[:padron].nil?
     @academic_info.save
     
     render status: :created,
