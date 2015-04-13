@@ -33,6 +33,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_one :profile, dependent: :destroy
+  has_one :academic_info, dependent: :destroy
 
   # Friendship Request model relation
   has_many :sent_friendship_requests, class_name: "FriendshipRequest",

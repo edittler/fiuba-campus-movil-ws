@@ -14,7 +14,13 @@ class Api::Users::ProfileController < Api::ApiController
 
     @jobs = Job.find_by( profile_id: @profile.id )
 
+    @academic_info = AcademicInfo.find_by!( user_id: params[:id].to_i )
+
+    logger.debug "[API] Show academicInfo: #{@academic_info.attributes.inspect}"
+
     logger.debug "[API] Show User: #{@profile.attributes.inspect}"
+
+
   end
 
   def edit
@@ -42,6 +48,11 @@ class Api::Users::ProfileController < Api::ApiController
     @phone.save
 
     @jobs = Job.find_by( profile_id: @profile.id )
+
+    @academic_info = AcademicInfo.find_by!( user_id: params[:id].to_i )
+    @academic_info.padron = profileUpdates[:padron]
+    @academic_info.save
+    
     render status: :created,
             json: { result: "ok", message: "Profile has been updated" }
 

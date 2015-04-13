@@ -32,6 +32,7 @@ class Api::Users::RegistrationsController < Api::ApiController
       profile.create_nationality( )
       profile.create_phone()
       profile.create_location()
+      user.create_academic_info()
       render status: :created,
             json: { result: "ok", message: "User has been created" }
       return
