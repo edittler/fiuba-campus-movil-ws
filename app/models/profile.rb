@@ -10,8 +10,8 @@
 #  city_id        :integer
 #  phone_id       :integer
 #  location_id    :integer
-#  first_name     :string
-#  last_name      :string
+#  firstn         :string
+#  lastn          :string
 #  user_id        :integer
 #
 # Indexes

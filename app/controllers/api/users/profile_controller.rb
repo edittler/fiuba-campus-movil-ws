@@ -17,12 +17,13 @@ class Api::Users::ProfileController < Api::ApiController
 
   def edit
 
+    logger.debug "[API] Edit User: #{params}"
     @profile = Profile.find_by!( user_id: params[:id].to_i )
 
     profileUpdates = params[:data][:profile]
 
-    @profile.first_name = profileUpdates[:firstName]
-    @profile.last_name = profileUpdates[:lastName]
+    @profile.firstn = profileUpdates[:firstn]
+    @profile.lastn = profileUpdates[:lastn]
     @profile.biography = profileUpdates[:biography]
     @profile.save
 
