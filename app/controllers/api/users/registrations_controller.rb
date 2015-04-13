@@ -20,7 +20,18 @@ class Api::Users::RegistrationsController < Api::ApiController
     # Create user
     user = User.new( user_params() )
     if user.save
+      #user.create_profile(:first_name => "tom" , :last_name => "rea", :biography => "aaaaaaaKBbiography")
+      #profile = Profile.find_by!( user_id: user.id )
+      #profile.create_city(:name => "bs as")
+      #profile.create_nationality( :nationality => "argentino")
+      #profile.create_phone( :number => "666666")
+      #profile.create_location()
       user.create_profile()
+      profile = Profile.find_by!( user_id: user.id )
+      profile.create_city()
+      profile.create_nationality( )
+      profile.create_phone()
+      profile.create_location()
       render status: :created,
             json: { result: "ok", message: "User has been created" }
       return

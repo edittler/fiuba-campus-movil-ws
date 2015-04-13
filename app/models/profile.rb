@@ -27,9 +27,9 @@ class Profile < ActiveRecord::Base
 
 belongs_to :user
 
-has_one :nationality
+has_one :nationality, dependent: :destroy
 
-has_one :city
+has_one :city, dependent: :destroy
 
 has_one :phone, dependent: :destroy
 

@@ -8,21 +8,22 @@ json.data do
 
   json.profile do
 
-    json.first_name  @user.profile.first_name || ""
-    json.last_name  @user.profile.last_name || ""
+    json.first_name  @profile.first_name || ""
+
+    json.last_name  @profile.last_name || ""
+
+    json.biography  @profile.biography || ""
 
     json.location do
-      json.latitude @user.profile.try(:location).try(:latitude) || ""
-      json.longitude @user.profile.try(:location).try(:longitude) || ""
+      json.latitude @profile.try(:location).try(:latitude) || ""
+      json.longitude @profile.try(:location).try(:longitude) || ""
     end
 
-    json.biography  @user.profile.biography || ""
-    json.nationality  @nationality || ""
-    json.city  @city || ""
-    json.phone do
-      json.type    @user.profile.try(:phone).try(:type) || ""
-      json.number  @user.profile.try(:phone).try(:phone) || ""
-    end
+    json.nationality  @nationality.nationality || ""
+
+    json.city  @city.name || ""
+
+    json.phone @phone.number || ""
 
     json.jobs(@jobs) do |json, job|
       json.job_id  job.try(:id) || ""
