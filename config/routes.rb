@@ -89,6 +89,7 @@ Rails.application.routes.draw do
     end
 
     namespace :friends do
+      get  ''                        => 'friendships#show'
       post 'add_friend'              => 'friendships#add_friend'
       post 'send_friendship_request' => 'friendship_requests#create'
     end

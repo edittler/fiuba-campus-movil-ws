@@ -1,5 +1,11 @@
 class Api::Friends::FriendshipsController < Api::ApiController
 
+  # GET /api/friends
+  def show
+    @friends = User.all
+    render status: :ok
+  end
+
   def add_friend
     logger.debug "[API] Add Friend: #{params}"
     @user = User.find(params[:user_id])
