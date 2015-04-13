@@ -11,10 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150412232308) do
+ActiveRecord::Schema.define(version: 20150413042938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "academic_infos", force: :cascade do |t|
+    t.string   "padron"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "user_id"
+  end
+
+  add_index "academic_infos", ["user_id"], name: "index_academic_infos_on_user_id", using: :btree
 
   create_table "admins", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -167,6 +176,7 @@ ActiveRecord::Schema.define(version: 20150412232308) do
   add_index "users", ["profile_id"], name: "index_users_on_profile_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "academic_infos", "users"
   add_foreign_key "cities", "profiles"
   add_foreign_key "date_intervals", "jobs"
   add_foreign_key "educations", "profiles"
