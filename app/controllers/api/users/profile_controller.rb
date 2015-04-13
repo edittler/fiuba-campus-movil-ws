@@ -4,6 +4,8 @@ class Api::Users::ProfileController < Api::ApiController
 
     @profile = Profile.find_by!( user_id: params[:id].to_i )
 
+    logger.debug "[API] Profile to show: #{@profile.attributes.inspect}"
+
     @nationality = Nationality.find_by!( profile_id: @profile.id )
 
     @city = City.find_by!( profile_id: @profile.id )
@@ -22,8 +24,8 @@ class Api::Users::ProfileController < Api::ApiController
 
     profileUpdates = params[:data][:profile]
 
-    @profile.firstn = profileUpdates[:firstn]
-    @profile.lastn = profileUpdates[:lastn]
+    @profile.first_name = profileUpdates[:first_name]
+    @profile.last_name = profileUpdates[:last_name]
     @profile.biography = profileUpdates[:biography]
     @profile.save
 

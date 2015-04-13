@@ -8,9 +8,9 @@ json.data do
 
   json.profile do
 
-    json.firstn  @profile.firstn || ""
+    json.first_name  @profile.first_name || ""
 
-    json.lastName  @profile.lastn || ""
+    json.last_name  @profile.last_name || ""
 
     json.biography  @profile.biography || ""
 
