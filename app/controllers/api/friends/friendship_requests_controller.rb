@@ -34,13 +34,17 @@ class Api::Friends::FriendshipRequestsController < Api::ApiController
 
     user_to_invite = User.find(user_to_invite_id)
     logger.debug "[API] User to invite: #{user_to_invite.attributes.inspect}"
-    logger.debug "[API] User sent requests: #{user.sent_friendship_requests.inspect}"
-
-    # TODO: chequear si el usuario ya envió invitacion al otro usuario
 
     request_params = { sender_user_id:   user.id,
                        receiver_user_id: user_to_invite_id }
-    friendship_request = FriendshipRequest.create(request_params)
+
+    if FriendshipRequest.exists?(request_params)
+      render status: :conflict,
+             json: { result: "error", message: "Frienship request has been sent" }
+      return
+    end
+
+    FriendshipRequest.create(request_params)
 
     render status: :ok,
            json: { result: "ok", message: "Frienship request sent" }
