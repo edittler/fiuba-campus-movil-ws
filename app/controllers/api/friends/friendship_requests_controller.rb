@@ -12,13 +12,15 @@ class Api::Friends::FriendshipRequestsController < Api::ApiController
 
     user_to_invite_id = params[:user_to_invite_id]
 
+    # TODO: Chequear si se quiere invitar a si mismo!
+
     unless User.exists?(user_to_invite_id)
       render status: :not_found,
              json: { result: "error", message: "User to invite no exists" }
       return
     end
 
-    # Chequear si ya son amigos!!!
+    # TODO: Chequear si ya son amigos!!!
 
     user_to_invite = User.find(user_to_invite_id)
     logger.debug "[API] User to invite: #{user_to_invite.attributes.inspect}"
