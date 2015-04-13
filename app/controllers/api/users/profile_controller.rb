@@ -19,21 +19,23 @@ class Api::Users::ProfileController < Api::ApiController
 
     @profile = Profile.find_by!( user_id: params[:id].to_i )
 
-    @profile.first_name = params[:first_name]
-    @profile.last_name = params[:last_name]
-    @profile.biography = params[:biography]
+    profileUpdates = params[:data][:profile]
+
+    @profile.first_name = profileUpdates[:firstName]
+    @profile.last_name = profileUpdates[:lastName]
+    @profile.biography = profileUpdates[:biography]
     @profile.save
 
     @nationality = Nationality.find_by!( profile_id: @profile.id )
-    @nationality.nationality = params[:nationality]
+    @nationality.nationality = profileUpdates[:nationality]
     @nationality.save
 
     @city = City.find_by!( profile_id: @profile.id )
-    @city.name = params[:city]
+    @city.name = profileUpdates[:city]
     @city.save
 
     @phone = Phone.find_by!( profile_id: @profile.id )
-    @phone.number = params[:phone]
+    @phone.number = profileUpdates[:phone]
     @phone.save
 
     @jobs = Job.find_by( profile_id: @profile.id )
