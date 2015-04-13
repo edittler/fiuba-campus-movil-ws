@@ -20,7 +20,6 @@ class Api::Users::ProfileController < Api::ApiController
 
     logger.debug "[API] Show User: #{@profile.attributes.inspect}"
 
-
   end
 
   def edit
@@ -55,8 +54,6 @@ class Api::Users::ProfileController < Api::ApiController
     
     render status: :created,
             json: { result: "ok", message: "Profile has been updated" }
-
-
   end
 
 end

@@ -26,13 +26,13 @@ class Api::Users::RegistrationsController < Api::ApiController
       #profile.create_nationality( :nationality => "argentino")
       #profile.create_phone( :number => "666666")
       #profile.create_location()
-      user.create_profile()
+      user.create_profile( profile_params() )
       profile = Profile.find_by!( user_id: user.id )
       profile.create_city()
       profile.create_nationality( )
       profile.create_phone()
       profile.create_location()
-      user.create_academic_info()
+      user.create_academic_info( academic_info_params() )
       render status: :created,
             json: { result: "ok", message: "User has been created" }
       return
@@ -47,7 +47,7 @@ class Api::Users::RegistrationsController < Api::ApiController
 
     def exists_required_params(registration_params)
       logger.debug "[API] User Create, check params #{registration_params}"
-      return ( !params[:email].nil? and !params[:password].nil? )
+      return !( params[:email].nil? or params[:password].nil? or params[:padron].nil? or params[:first_name].nil? or params[:last_name].nil? )
     end
 
     def user_params
@@ -55,9 +55,18 @@ class Api::Users::RegistrationsController < Api::ApiController
       params.require(:registration).permit(:email, :password)
     end
 
-   # def profile_params
-   #   logger.debug "[API] Profile Params #{params}"
-    #  params.require(:registration).permit(:email, :password)
-    #end
+   def profile_params
+      logger.debug "[API] Profile Params #{params}"
+      params.require(:registration).permit(:first_name, :last_name)
+    end
+
+   def academic_info_params
+      logger.debug "[API] Academic_info Params #{params}"
+      params.require(:registration).permit(:padron)
+    end
+
+
+
+
 
 end
