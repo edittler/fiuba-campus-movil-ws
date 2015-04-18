@@ -80,10 +80,16 @@ Rails.application.routes.draw do
   namespace :api, :defaults => { :format => 'json' } do
 
     namespace :users do
+      # Sign Up, Sign In, Sign Out, Recovery password operations
       post   'sign_up'  => 'registrations#create'
       post   'sign_in'  => 'sessions#create',      :as => :session
       delete 'sign_out' => 'sessions#destroy'
       post   'password' => 'passwords#create'
+
+      # Users operations
+      get    'search'   => 'search_engine#basic_search'
+
+      # Single user operations 
       get    ':id'      => 'profile#show'
       post   ':id/edit' => 'profile#edit'
     end
