@@ -1,5 +1,16 @@
 class Api::Friends::FriendshipRequestsController < Api::ApiController
 
+  # GET /api/friends/pending_friendship_requests
+  def show
+    user = User.find_by_authentication_token(params[:user_token])
+    logger.debug "[API] User sender: #{user.attributes.inspect}"
+
+    @pending_friendship_requests = user.received_friendship_requests
+    logger.debug "[API] Pending friendship requests: #{@pending_friendship_requests.inspect}"
+
+    render status: :ok
+  end
+
   # POST /api/friends/send_friendship_request
   def create
     unless exists_create_required_params
