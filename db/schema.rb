@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150417031105) do
+ActiveRecord::Schema.define(version: 20150419185724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,8 +49,6 @@ ActiveRecord::Schema.define(version: 20150417031105) do
     t.datetime "updated_at", null: false
     t.integer  "profile_id"
   end
-
-  add_index "cities", ["profile_id"], name: "index_cities_on_profile_id", using: :btree
 
   create_table "date_intervals", force: :cascade do |t|
     t.datetime "init"
@@ -114,16 +112,12 @@ ActiveRecord::Schema.define(version: 20150417031105) do
     t.integer  "profile_id"
   end
 
-  add_index "locations", ["profile_id"], name: "index_locations_on_profile_id", using: :btree
-
   create_table "nationalities", force: :cascade do |t|
     t.string   "nationality"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "profile_id"
   end
-
-  add_index "nationalities", ["profile_id"], name: "index_nationalities_on_profile_id", using: :btree
 
   create_table "phones", force: :cascade do |t|
     t.string   "type"
@@ -133,25 +127,15 @@ ActiveRecord::Schema.define(version: 20150417031105) do
     t.integer  "profile_id"
   end
 
-  add_index "phones", ["profile_id"], name: "index_phones_on_profile_id", using: :btree
-
   create_table "profiles", force: :cascade do |t|
     t.string   "biography"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.integer  "nationality_id"
-    t.integer  "city_id"
-    t.integer  "phone_id"
-    t.integer  "location_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string   "first_name"
     t.string   "last_name"
     t.integer  "user_id"
   end
 
-  add_index "profiles", ["city_id"], name: "index_profiles_on_city_id", using: :btree
-  add_index "profiles", ["location_id"], name: "index_profiles_on_location_id", using: :btree
-  add_index "profiles", ["nationality_id"], name: "index_profiles_on_nationality_id", using: :btree
-  add_index "profiles", ["phone_id"], name: "index_profiles_on_phone_id", using: :btree
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -175,16 +159,8 @@ ActiveRecord::Schema.define(version: 20150417031105) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "academic_infos", "users"
-  add_foreign_key "cities", "profiles"
   add_foreign_key "date_intervals", "jobs"
   add_foreign_key "educations", "profiles"
   add_foreign_key "jobs", "profiles"
-  add_foreign_key "locations", "profiles"
-  add_foreign_key "nationalities", "profiles"
-  add_foreign_key "phones", "profiles"
-  add_foreign_key "profiles", "cities"
-  add_foreign_key "profiles", "locations"
-  add_foreign_key "profiles", "nationalities"
-  add_foreign_key "profiles", "phones"
   add_foreign_key "profiles", "users"
 end
