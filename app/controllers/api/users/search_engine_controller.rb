@@ -10,14 +10,17 @@ class Api::Users::SearchEngineController < Api::ApiController
     end
 
     user = User.find_by_authentication_token(params[:user_token])
-    logger.debug "[API] User sender: #{user.attributes.inspect}"
 
     search_results = Array.new
     if params[:query].nil?
-      search_results = User.all
+      search_results = User.includes(:profile).all
     else
-      search_results = Array.new
+      conditions = "LOWER(profiles.first_name) LIKE ? OR LOWER(profiles.last_name) LIKE ? OR LOWER(nationalities.nationality) LIKE ? OR LOWER(cities.name) LIKE ?"
+      query = '%' + params[:query].downcase + '%'
+      logger.debug "[API] Where query: #{query}"
+      search_results = User.joins(profile: [:nationality, :city]).where(conditions, query, query, query, query)
     end
+    logger.debug "[API] Search result: #{search_results.inspect}"
 
     @users_found = Array.new
 
