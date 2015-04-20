@@ -9,10 +9,6 @@
 #  updated_at :datetime         not null
 #  profile_id :integer
 #
-# Indexes
-#
-#  index_phones_on_profile_id  (profile_id)
-#
 
 class Phone < ActiveRecord::Base
 

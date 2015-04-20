@@ -2,19 +2,19 @@ class Api::Users::ProfileController < Api::ApiController
 
   def show
 
-    @profile = Profile.find_by!( user_id: params[:id].to_i )
+    @profile = Profile.find_by( user_id: params[:id].to_i )
 
     logger.debug "[API] Profile to show: #{@profile.attributes.inspect}"
 
-    @nationality = Nationality.find_by!( profile_id: @profile.id )
+    @nationality = Nationality.find_by( profile_id: @profile.id )
 
-    @city = City.find_by!( profile_id: @profile.id )
+    @city = City.find_by( profile_id: @profile.id )
 
-    @phone = Phone.find_by!( profile_id: @profile.id )
+    @phone = Phone.find_by( profile_id: @profile.id )
 
-    @jobs = Job.find_by( profile_id: @profile.id )
+    @jobs = Job.where( profile_id: @profile.id )
 
-    @academic_info = AcademicInfo.find_by!( user_id: params[:id].to_i )
+    @academic_info = AcademicInfo.find_by( user_id: params[:id].to_i )
 
     logger.debug "[API] Show academicInfo: #{@academic_info.attributes.inspect}"
 
@@ -25,7 +25,7 @@ class Api::Users::ProfileController < Api::ApiController
   def edit
 
     logger.debug "[API] Edit User: #{params}"
-    @profile = Profile.find_by!( user_id: params[:id].to_i )
+    @profile = Profile.find_by( user_id: params[:id].to_i )
 
     profileUpdates = params[:data][:profile]
 
@@ -34,21 +34,19 @@ class Api::Users::ProfileController < Api::ApiController
     @profile.biography = profileUpdates[:biography] unless profileUpdates[:biography].nil?
     @profile.save
 
-    @nationality = Nationality.find_by!( profile_id: @profile.id )
+    @nationality = Nationality.find_by( profile_id: @profile.id )
     @nationality.nationality = profileUpdates[:nationality] unless profileUpdates[:nationality].nil?
     @nationality.save
 
-    @city = City.find_by!( profile_id: @profile.id )
+    @city = City.find_by( profile_id: @profile.id )
     @city.name = profileUpdates[:city] unless profileUpdates[:city].nil?
     @city.save
 
-    @phone = Phone.find_by!( profile_id: @profile.id )
+    @phone = Phone.find_by( profile_id: @profile.id )
     @phone.number = profileUpdates[:phone] unless profileUpdates[:phone].nil?
     @phone.save
 
-    @jobs = Job.find_by( profile_id: @profile.id )
-
-    @academic_info = AcademicInfo.find_by!( user_id: params[:id].to_i )
+    @academic_info = AcademicInfo.find_by( user_id: params[:id].to_i )
     @academic_info.padron = profileUpdates[:padron] unless profileUpdates[:padron].nil?
     @academic_info.save
     
