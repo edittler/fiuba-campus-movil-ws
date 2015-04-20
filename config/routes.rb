@@ -94,6 +94,11 @@ Rails.application.routes.draw do
       post   ':id/edit' => 'profile#edit'
     end
 
+    namespace :jobs do
+      post    'create_job' => 'job#create'
+      post    ':id/edit'  => 'job#edit'
+    end
+
     namespace :friends do
       get  ''                            => 'friendships#show'
       get  'pending_friendship_requests' => 'friendship_requests#show'

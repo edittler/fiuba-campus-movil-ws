@@ -27,11 +27,10 @@ class Api::Users::RegistrationsController < Api::ApiController
       #profile.create_phone( :number => "666666")
       #profile.create_location()
       user.create_profile( profile_params() )
-      profile = Profile.find_by!( user_id: user.id )
-      profile.create_city()
-      profile.create_nationality( )
-      profile.create_phone()
-      profile.create_location()
+      user.profile.create_city()
+      user.profile.create_nationality( )
+      user.profile.create_phone()
+      user.profile.create_location()
       user.create_academic_info( academic_info_params() )
       render status: :created,
             json: { result: "ok", message: "User has been created" }
@@ -47,7 +46,7 @@ class Api::Users::RegistrationsController < Api::ApiController
 
     def exists_required_params(registration_params)
       logger.debug "[API] User Create, check params #{registration_params}"
-      return !( params[:email].nil? or params[:password].nil? or params[:padron].nil? or params[:first_name].nil? or params[:last_name].nil? )
+      return !( registration_params[:email].nil? or registration_params[:password].nil? or registration_params[:padron].nil? or registration_params[:first_name].nil? or registration_params[:last_name].nil? )
     end
 
     def user_params

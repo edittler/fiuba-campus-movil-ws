@@ -27,12 +27,14 @@ json.data do
 
     json.phone @phone.number || ""
 
-    json.jobs(@jobs) do |json, job|
-      json.job_id  job.try(:id) || ""
+    json.jobs @jobs do |job|
+      json.id  job.try(:id) || ""
       json.company  job.try(:company) || ""
       json.position  job.try(:position) || ""
-      json.init  job.try(:date_interval).try(:init) || ""
-      json.end  job.try(:date_interval).try(:end) || ""
+      json.date_interval do
+        json.init  job.try(:date_interval).try(:init) || ""
+        json.end  job.try(:date_interval).try(:end) || ""
+      end
     end
 
   end
