@@ -46,7 +46,7 @@ class Api::Users::RegistrationsController < Api::ApiController
 
     def exists_required_params(registration_params)
       logger.debug "[API] User Create, check params #{registration_params}"
-      return !( params[:email].nil? or params[:password].nil? or params[:padron].nil? or params[:first_name].nil? or params[:last_name].nil? )
+      return !( registration_params[:email].nil? or registration_params[:password].nil? or registration_params[:padron].nil? or registration_params[:first_name].nil? or registration_params[:last_name].nil? )
     end
 
     def user_params

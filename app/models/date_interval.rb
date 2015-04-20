@@ -16,5 +16,5 @@
 
 class DateInterval < ActiveRecord::Base
 
-belongs_to :job
+belongs_to :job,:autosave => true
 end
