@@ -37,6 +37,19 @@ json.data do
       end
     end
 
+    json.educations @educations do |education|
+      json.id  education.try(:id) || ""
+      json.diploma  education.try(:diploma) || ""
+      json.institute do
+        json.id   education.try(:institute).try(:id) || ""
+        json.name  education.try(:institute).try(:name) || ""
+      end
+      json.date_interval do
+        json.init  education.try(:date_interval).try(:init) || ""
+        json.end  education.try(:date_interval).try(:end) || ""
+      end
+    end
+
   end
 
 end

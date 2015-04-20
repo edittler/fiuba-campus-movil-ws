@@ -14,6 +14,8 @@ class Api::Users::ProfileController < Api::ApiController
 
     @jobs = Job.where( profile_id: @profile.id )
 
+    @educations = Education.where( profile_id: @profile.id )
+
     @academic_info = AcademicInfo.find_by( user_id: params[:id].to_i )
 
     logger.debug "[API] Show academicInfo: #{@academic_info.attributes.inspect}"

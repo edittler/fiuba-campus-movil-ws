@@ -6,6 +6,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  profile_id :integer
+#  diploma    :string
 #
 # Indexes
 #
@@ -15,6 +16,6 @@
 class Education < ActiveRecord::Base
 
 belongs_to :profile
-has_one :institute
-has_one :date_interval, dependent: :destroy
+has_one :institute, dependent: :destroy, :autosave => true
+has_one :date_interval, dependent: :destroy,:autosave => true
 end

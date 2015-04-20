@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150419185724) do
+ActiveRecord::Schema.define(version: 20150420044937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,17 +53,19 @@ ActiveRecord::Schema.define(version: 20150419185724) do
   create_table "date_intervals", force: :cascade do |t|
     t.datetime "init"
     t.datetime "end"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.integer  "job_id"
+    t.integer  "education_id"
   end
 
-  add_index "date_intervals", ["job_id"], name: "index_date_intervals_on_job_id", using: :btree
+  add_index "date_intervals", ["education_id"], name: "index_date_intervals_on_education_id", using: :btree
 
   create_table "educations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "profile_id"
+    t.string   "diploma"
   end
 
   add_index "educations", ["profile_id"], name: "index_educations_on_profile_id", using: :btree
@@ -90,9 +92,12 @@ ActiveRecord::Schema.define(version: 20150419185724) do
 
   create_table "institutes", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "education_id"
   end
+
+  add_index "institutes", ["education_id"], name: "index_institutes_on_education_id", using: :btree
 
   create_table "jobs", force: :cascade do |t|
     t.string   "company"
@@ -159,8 +164,9 @@ ActiveRecord::Schema.define(version: 20150419185724) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "academic_infos", "users"
-  add_foreign_key "date_intervals", "jobs"
+  add_foreign_key "date_intervals", "educations"
   add_foreign_key "educations", "profiles"
+  add_foreign_key "institutes", "educations"
   add_foreign_key "jobs", "profiles"
   add_foreign_key "profiles", "users"
 end

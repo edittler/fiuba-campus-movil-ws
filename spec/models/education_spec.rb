@@ -6,6 +6,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  profile_id :integer
+#  diploma    :string
 #
 # Indexes
 #
