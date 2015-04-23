@@ -58,6 +58,18 @@ class User < ActiveRecord::Base
     end
   end
 
+  def friend?(user)
+    Friendship.exists?(this_user_id: self.id, other_user_id: user.id)
+  end
+
+  def friendship_request_pending?(user)
+    FriendshipRequest.exists?(sender_user_id: user.id, receiver_user_id: self.id)
+  end
+
+  def friendship_request_sent?(user)
+    FriendshipRequest.exists?(sender_user_id: self.id, receiver_user_id: user.id)
+  end
+
   private
 
     def generate_authentication_token
