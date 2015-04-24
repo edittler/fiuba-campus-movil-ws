@@ -14,17 +14,28 @@ class Api::Groups::GroupsController < Api::ApiController
     user = User.find_by_authentication_token(params[:user_token])
     logger.debug "[API] User sender: #{user.attributes.inspect}"
 
-    group = Group.create(groups_params)
+    unless exists_create_group_required_params?
+      render_missing_required_params
+      return
+    end
+
+    group = Group.create(group_params)
     # Add user to group as manager
     group.add(user, as: 'manager')
 
     render status: :created,
-           json: { result: "ok", message: "Succes create groups" }
+           json: { result: "ok", message: "Create group success" }
   end
 
   private
 
-    def groups_params
+    def exists_create_group_required_params?
+      return false if params[:group].nil?
+      group_params = params[:group]
+      return !group_params[:name].nil?
+    end
+
+    def group_params
       logger.debug "[API] Group Params #{params}"
       params.require(:group).permit(:name, :description)
     end

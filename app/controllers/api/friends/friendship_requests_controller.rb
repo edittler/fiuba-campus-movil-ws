@@ -51,7 +51,7 @@ class Api::Friends::FriendshipRequestsController < Api::ApiController
            json: { result: "ok", message: "Frienship request sent" }
   end
 
-# POST /api/friends/respond_friendship_request
+  # POST /api/friends/respond_friendship_request
   def reply
     unless exists_reply_required_params
       render_missing_required_params
