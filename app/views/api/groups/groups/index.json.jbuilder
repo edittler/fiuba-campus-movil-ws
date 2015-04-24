@@ -9,7 +9,7 @@ json.data do
   json.groups @groups do |group|
     json.group_id    group.id
     json.name        group.name
-    json.description group.description
+    json.description group.description || ""
   end
 
 end
