@@ -91,15 +91,16 @@ ActiveRecord::Schema.define(version: 20150424031315) do
   add_index "friendships", ["this_user_id"], name: "index_friendships_on_this_user_id", using: :btree
 
   create_table "group_memberships", force: :cascade do |t|
-    t.string   "membership_type"
-    t.integer  "user_id"
+    t.string   "member_type"
+    t.integer  "member_id"
     t.integer  "group_id"
+    t.string   "membership_type"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
 
   add_index "group_memberships", ["group_id"], name: "index_group_memberships_on_group_id", using: :btree
-  add_index "group_memberships", ["user_id"], name: "index_group_memberships_on_user_id", using: :btree
+  add_index "group_memberships", ["member_id", "member_type"], name: "index_group_memberships_on_member_id_and_member_type", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
@@ -151,30 +152,30 @@ ActiveRecord::Schema.define(version: 20150424031315) do
   end
 
   create_table "profiles", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "first_name"
+    t.string   "last_name"
     t.string   "biography"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string   "first_name"
-    t.string   "last_name"
-    t.integer  "user_id"
   end
 
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
-    t.string   "reset_password_token",   limit: 255
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                      default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "authentication_token",   limit: 255
+    t.string   "authentication_token"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
@@ -184,9 +185,6 @@ ActiveRecord::Schema.define(version: 20150424031315) do
   add_foreign_key "academic_infos", "users"
   add_foreign_key "date_intervals", "educations"
   add_foreign_key "educations", "profiles"
-  add_foreign_key "group_memberships", "groups"
-  add_foreign_key "group_memberships", "users"
   add_foreign_key "institutes", "educations"
   add_foreign_key "jobs", "profiles"
-  add_foreign_key "profiles", "users"
 end

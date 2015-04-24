@@ -111,6 +111,11 @@ Rails.application.routes.draw do
       post 'respond_friendship_request'  => 'friendship_requests#reply'
     end
 
+    namespace :groups do
+      get  '' => 'groups#index'
+      post '' => 'groups#create'
+    end
+
   end
 
 end
