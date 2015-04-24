@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150420044937) do
+ActiveRecord::Schema.define(version: 20150424031315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,24 @@ ActiveRecord::Schema.define(version: 20150420044937) do
   add_index "friendships", ["other_user_id"], name: "index_friendships_on_other_user_id", using: :btree
   add_index "friendships", ["this_user_id"], name: "index_friendships_on_this_user_id", using: :btree
 
+  create_table "group_memberships", force: :cascade do |t|
+    t.string   "membership_type"
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "group_memberships", ["group_id"], name: "index_group_memberships_on_group_id", using: :btree
+  add_index "group_memberships", ["user_id"], name: "index_group_memberships_on_user_id", using: :btree
+
+  create_table "groups", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "institutes", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at",   null: false
@@ -166,6 +184,8 @@ ActiveRecord::Schema.define(version: 20150420044937) do
   add_foreign_key "academic_infos", "users"
   add_foreign_key "date_intervals", "educations"
   add_foreign_key "educations", "profiles"
+  add_foreign_key "group_memberships", "groups"
+  add_foreign_key "group_memberships", "users"
   add_foreign_key "institutes", "educations"
   add_foreign_key "jobs", "profiles"
   add_foreign_key "profiles", "users"

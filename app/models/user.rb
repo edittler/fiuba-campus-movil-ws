@@ -30,6 +30,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  groupify :group_member
+
   has_one :profile, dependent: :destroy
   has_one :academic_info, dependent: :destroy
 

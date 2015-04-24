@@ -38,7 +38,8 @@ gem 'foundation-rails'
 # Use Devise authentication rails engine
 gem 'devise'
 
-gem 'annotate', '~> 2.6.6'
+#Adds group and membership functionality to Rails models.
+gem 'groupify'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
@@ -59,6 +60,10 @@ group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 
+  # Add a comment summarizing the current schema to the top or bottom of each of your
+  gem 'annotate', '~> 2.6.6'
+
+  # Easily generate a diagram based on your application's Active Record models
   gem 'rails-erd'
 end
 
