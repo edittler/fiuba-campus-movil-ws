@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Registration US249", type: :request do
 
-  it "UAT249.1 alumno se registra correctamente" do
+  it "UAT249.1 alumno se registra correctamente." do
     post "/api/users/sign_up",
         '{
               "email":     "treale@fiuba.com",
