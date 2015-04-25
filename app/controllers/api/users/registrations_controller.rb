@@ -5,8 +5,7 @@ class Api::Users::RegistrationsController < Api::ApiController
   def create
     # Check correct params
     unless exists_required_params(params[:registration])
-      render status: :bad_request,
-             json: { result: "error", message: "Missing required parameters" }
+      render_missing_required_params
       return
     end
 
@@ -18,22 +17,16 @@ class Api::Users::RegistrationsController < Api::ApiController
     end
 
     # Create user
-    user = User.new( user_params() )
+    user = User.new(user_params)
     if user.save
-      #user.create_profile(:first_name => "tom" , :last_name => "rea", :biography => "aaaaaaaKBbiography")
-      #profile = Profile.find_by!( user_id: user.id )
-      #profile.create_city(:name => "bs as")
-      #profile.create_nationality( :nationality => "argentino")
-      #profile.create_phone( :number => "666666")
-      #profile.create_location()
-      user.create_profile( profile_params() )
-      user.profile.create_city()
-      user.profile.create_nationality( )
-      user.profile.create_phone()
-      user.profile.create_location()
-      user.create_academic_info( academic_info_params() )
+      user.create_profile(profile_params)
+      user.profile.create_city
+      user.profile.create_nationality
+      user.profile.create_phone
+      user.profile.create_location
+      user.create_academic_info(academic_info_params)
       render status: :created,
-            json: { result: "ok", message: "User has been created" }
+             json: { result: "ok", message: "User has been created" }
       return
     else
       warden.custom_failure!
@@ -63,9 +56,5 @@ class Api::Users::RegistrationsController < Api::ApiController
       logger.debug "[API] Academic_info Params #{params}"
       params.require(:registration).permit(:padron)
     end
-
-
-
-
 
 end
