@@ -40,8 +40,25 @@ class Api::Educations::EducationsController < Api::ApiController
     input_values_into_education(education,education_params)
     education.save()
 
-    render status: :edited,
+    render status: :ok,
             json: { result: "ok", message: "Education has been updated" }
+  end
+
+  def destroy
+
+  logger.debug "[API] Destroy Education: #{params}"
+
+  education = Education.find_by( id:params[:id].to_i )
+  unless  education
+    render status: :conflict,
+            json: { result: "error", message: "Education not found" }
+    return
+  end
+
+  education.destroy()
+
+  render status: :ok,
+          json: { result: "ok", message: "Education has been deleted" }
   end
 
   def exists_required_params(education_params)

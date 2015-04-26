@@ -97,11 +97,13 @@ Rails.application.routes.draw do
     namespace :jobs do
       post    'create_job' => 'job#create'
       post    ':id/edit'  => 'job#edit'
+      post    ':id/destroy' => 'job#destroy'
     end
 
     namespace :educations do
       post    'create_education' => 'educations#create'
       post    ':id/edit'  => 'educations#edit'
+      post    ':id/destroy' => 'educations#destroy'
     end
 
     namespace :friends do

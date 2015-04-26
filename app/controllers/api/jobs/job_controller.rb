@@ -39,8 +39,25 @@ class Api::Jobs::JobController < Api::ApiController
     input_values_into_job(job,job_params)
     job.save()
 
-    render status: :edited,
+    render status: :ok,
             json: { result: "ok", message: "Job has been updated" }
+  end
+
+  def destroy
+
+    logger.debug "[API] Destroy Job: #{params}"
+
+    job = Job.find_by( id:params[:id].to_i )
+    unless  job
+      render status: :conflict,
+             json: { result: "error", message: "Job not found" }
+      return
+    end
+
+    job.destroy()
+
+    render status: :ok,
+            json: { result: "ok", message: "Job has been deleted" }
   end
 
   def exists_required_params(job_params)
