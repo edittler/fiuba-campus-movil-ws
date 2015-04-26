@@ -77,4 +77,3 @@ RSpec.describe "US224 Inicio de sesión de usuarios.", type: :request do
   end
 
 end
-
