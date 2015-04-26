@@ -47,10 +47,6 @@ class Api::Users::ProfileController < Api::ApiController
     @phone = Phone.find_by( profile_id: @profile.id )
     @phone.number = profileUpdates[:phone] unless profileUpdates[:phone].nil?
     @phone.save
-
-    @academic_info = AcademicInfo.find_by( user_id: params[:id].to_i )
-    @academic_info.padron = profileUpdates[:padron] unless profileUpdates[:padron].nil?
-    @academic_info.save
     
     render status: :created,
             json: { result: "ok", message: "Profile has been updated" }
