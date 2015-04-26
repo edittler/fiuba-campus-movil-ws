@@ -106,6 +106,10 @@ Rails.application.routes.draw do
       post    ':id/destroy' => 'educations#destroy'
     end
 
+    namespace :academic_info do
+      post    'edit_career' => 'academic_info#edit'
+    end
+
     namespace :friends do
       get  ''                            => 'friendships#show'
       get  'pending_friendship_requests' => 'friendship_requests#show'

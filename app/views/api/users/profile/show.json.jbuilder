@@ -16,6 +16,8 @@ json.data do
 
     json.padron  @academic_info.padron || ""
 
+    json.career @academic_info.carreer || ""
+
     json.location do
       json.latitude @profile.try(:location).try(:latitude) || ""
       json.longitude @profile.try(:location).try(:longitude) || ""
