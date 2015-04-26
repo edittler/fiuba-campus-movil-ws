@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150424031315) do
+ActiveRecord::Schema.define(version: 20150425231713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20150424031315) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "user_id"
+    t.string   "carreer"
   end
 
   add_index "academic_infos", ["user_id"], name: "index_academic_infos_on_user_id", using: :btree
@@ -152,30 +153,30 @@ ActiveRecord::Schema.define(version: 20150424031315) do
   end
 
   create_table "profiles", force: :cascade do |t|
-    t.integer  "user_id"
-    t.string   "first_name"
-    t.string   "last_name"
     t.string   "biography"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "first_name"
+    t.string   "last_name"
+    t.integer  "user_id"
   end
 
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",                      default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "authentication_token"
+    t.string   "authentication_token",   limit: 255
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
@@ -187,4 +188,5 @@ ActiveRecord::Schema.define(version: 20150424031315) do
   add_foreign_key "educations", "profiles"
   add_foreign_key "institutes", "educations"
   add_foreign_key "jobs", "profiles"
+  add_foreign_key "profiles", "users"
 end
