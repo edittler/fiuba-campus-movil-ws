@@ -5,7 +5,11 @@ class Admin::UsersController < ApplicationController
   before_filter :authenticate_admin!
 
   def index
-    @users = User.all
+    if params[:approved] == "false"
+      @users = User.find_all_by_approved(false)
+    else
+      @users = User.all
+    end
   end
 
   def show
@@ -23,6 +27,16 @@ class Admin::UsersController < ApplicationController
     else
       render 'new'
     end
+  end
+
+  def approve
+    logger.debug "[ADMIN] Params: #{params}"
+    @user = User.find(params[:id])
+    logger.debug "[ADMIN] User to approve: #{@user}"
+    @user.approved = true
+    @user.save
+    UserMailer.welcome @user
+    redirect_to admin_users_path
   end
 
   def user_params
