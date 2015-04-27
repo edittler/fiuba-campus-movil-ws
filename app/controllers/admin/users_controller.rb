@@ -32,10 +32,10 @@ class Admin::UsersController < ApplicationController
   def approve
     logger.debug "[ADMIN] Params: #{params}"
     @user = User.find(params[:id])
-    logger.debug "[ADMIN] User to approve: #{@user}"
+    logger.debug "[ADMIN] User to approve: #{@user.attributes.inspect}"
     @user.approved = true
     @user.save
-    UserMailer.welcome @user
+    UserMailer.welcome(@user).deliver_now
     redirect_to admin_users_path
   end
 
