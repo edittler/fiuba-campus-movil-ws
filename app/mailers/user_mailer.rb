@@ -1,10 +1,10 @@
 class UserMailer < ApplicationMailer
-  default from: "ezperez@fi.uba.ar"
+  default from: "fiubacampusmovil@gmail.com"
 
   def welcome(user)
     logger.debug "[USER MAILER] User Params: #{user.attributes.inspect}"
     @user = user
-    mail(to: @user.email, subject: 'Bienvenidos a FIUBA Campus Móvil')
+    mail(to: @user.email, subject: 'Bienvenidos a FIUBA Campus Movil')
   end
 
 end

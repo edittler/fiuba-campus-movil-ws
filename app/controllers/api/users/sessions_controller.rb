@@ -14,18 +14,26 @@ class Api::Users::SessionsController < Api::ApiController
     # Authentication
     @user = User.find_by_email(email)
 
-    if @user
-      if @user.valid_password? password
-        @user.restore_authentication_token!
-        # Render JSON in JBuilder.
-        # See /app/views/api/users/sessions/create.json.jbuilder
-        render status: :ok
-      else
-        render_invalid_email_or_password
-      end
-    else
+    if @user.nil?
       render_invalid_email_or_password
+      return
     end
+
+    unless @user.approved
+      render status: :ok,
+             json: { result: "unapprovedUser", message: "The user has not been approved." }
+      return
+    end
+
+    unless @user.valid_password? password
+      render_invalid_email_or_password
+      return
+    end
+
+    @user.restore_authentication_token!
+    # Render JSON in JBuilder.
+    # See /app/views/api/users/sessions/create.json.jbuilder
+    render status: :ok
   end
 
   # DELETE /api/users/sign_out
