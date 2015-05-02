@@ -19,14 +19,14 @@ class Api::Users::SessionsController < Api::ApiController
       return
     end
 
-    unless @user.approved
-      render status: :ok,
-             json: { result: "unapprovedUser", message: "The user has not been approved." }
+    unless @user.valid_password? password
+      render_invalid_email_or_password
       return
     end
 
-    unless @user.valid_password? password
-      render_invalid_email_or_password
+    unless @user.approved
+      render status: :ok,
+             json: { result: "unapprovedUser", message: "The user has not been approved." }
       return
     end
 
