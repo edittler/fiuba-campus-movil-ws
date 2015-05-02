@@ -1,27 +1,27 @@
 class Api::Users::ProfileController < Api::ApiController
 
   def show
+    request_user = User.find_by_authentication_token(params[:user_token])
 
-    @profile = Profile.find_by( user_id: params[:id].to_i )
+    @user = User.find(params[:id])
 
-    logger.debug "[API] Profile to show: #{@profile.attributes.inspect}"
-
-    @nationality = Nationality.find_by( profile_id: @profile.id )
-
-    @city = City.find_by( profile_id: @profile.id )
-
-    @phone = Phone.find_by( profile_id: @profile.id )
-
-    @jobs = Job.where( profile_id: @profile.id )
-
-    @educations = Education.where( profile_id: @profile.id )
-
-    @academic_info = AcademicInfo.find_by( user_id: params[:id].to_i )
-
-    logger.debug "[API] Show academicInfo: #{@academic_info.attributes.inspect}"
-
-    logger.debug "[API] Show User: #{@profile.attributes.inspect}"
-
+    @friendship = "noFriends"
+    if request_user.id == @user.id
+      @friendship = "yourself"
+      return
+    end
+    if request_user.friend? @user
+      @friendship = "friends"
+      return
+    end
+    if request_user.friendship_request_sent? @user
+      @friendship = "friendshipRequestSent"
+      return
+    end
+    if request_user.friendship_request_pending? @user
+      @friendship = "pendingFriendshipRequest"
+      return
+    end
   end
 
   def edit

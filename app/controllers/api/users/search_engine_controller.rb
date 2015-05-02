@@ -22,14 +22,11 @@ class Api::Users::SearchEngineController < Api::ApiController
       city_conditions = "LOWER(profiles.first_name) NOT LIKE ? AND LOWER(profiles.last_name) NOT LIKE ? AND LOWER(cities.name) LIKE ?"
       nationality_conditions = "LOWER(profiles.first_name) NOT LIKE ? AND LOWER(profiles.last_name) NOT LIKE ? AND LOWER(nationalities.nationality) LIKE ?"
       query = '%' + params[:query].downcase + '%'
-      logger.debug "[API] Where query: #{query}"
+      #logger.debug "[API] Where query: #{query}"
       results_by_name = User.joins(:profile).where(name_conditions, query, query)
       results_by_city = User.joins(profile: [:city]).where(city_conditions, query, query, query)
       results_by_nationality = User.joins(profile: [:nationality]).where(nationality_conditions, query, query, query)
     end
-    #logger.debug "[API] Search results by name: #{results_by_name.inspect}"
-    #logger.debug "[API] Search results by city: #{results_by_city.inspect}"
-    #logger.debug "[API] Search results by nationality: #{results_by_nationality.inspect}"
 
     @users_by_name = user_results_by_name(user, results_by_name)
     @users_by_city = user_results_by_city(user, results_by_city)
@@ -41,7 +38,7 @@ class Api::Users::SearchEngineController < Api::ApiController
   private
 
     def exists_required_params
-      logger.debug "[API] Basic seach, check params #{params}"
+      #logger.debug "[API] Basic seach, check params #{params}"
       return ( params.has_key?(:query) )
     end
 
@@ -77,14 +74,12 @@ class Api::Users::SearchEngineController < Api::ApiController
 
         if seeker_user.friend? user_result
           update_user_hash_friends user_found
-          #logger.debug "[API] User Result (friends) #{user_found}"
           users_array << user_found
           next
         end
 
         if seeker_user.friendship_request_sent? user_result
           update_user_hash_friendship_request_sent user_found
-          #logger.debug "[API] User Result (friendship request sent) #{user_found}"
           users_array << user_found
           next
         end
@@ -92,7 +87,6 @@ class Api::Users::SearchEngineController < Api::ApiController
         if seeker_user.friendship_request_pending? user_result
           friendship_request = FriendshipRequest.find_by(sender_user_id: user_result.id, receiver_user_id: seeker_user.id)
           update_user_hash_friendship_request_pending(user_found, friendship_request.id)
-          #logger.debug "[API] User Result (pending friendship request) #{user_found}"
           users_array << user_found
           next
         end
@@ -114,14 +108,12 @@ class Api::Users::SearchEngineController < Api::ApiController
 
         if seeker_user.friend? user_result
           update_user_hash_friends user_found
-          #logger.debug "[API] User Result (friends) #{user_found}"
           users_array << user_found
           next
         end
 
         if seeker_user.friendship_request_sent? user_result
           update_user_hash_friendship_request_sent user_found
-          #logger.debug "[API] User Result (friendship request sent) #{user_found}"
           users_array << user_found
           next
         end
@@ -129,7 +121,6 @@ class Api::Users::SearchEngineController < Api::ApiController
         if seeker_user.friendship_request_pending? user_result
           friendship_request = FriendshipRequest.find_by(sender_user_id: user_result.id, receiver_user_id: seeker_user.id)
           update_user_hash_friendship_request_pending(user_found, friendship_request.id)
-          #logger.debug "[API] User Result (pending friendship request) #{user_found}"
           users_array << user_found
           next
         end
@@ -151,14 +142,12 @@ class Api::Users::SearchEngineController < Api::ApiController
 
         if seeker_user.friend? user_result
           update_user_hash_friends user_found
-          #logger.debug "[API] User Result (friends) #{user_found}"
           users_array << user_found
           next
         end
 
         if seeker_user.friendship_request_sent? user_result
           update_user_hash_friendship_request_sent user_found
-          #logger.debug "[API] User Result (friendship request sent) #{user_found}"
           users_array << user_found
           next
         end
@@ -166,7 +155,6 @@ class Api::Users::SearchEngineController < Api::ApiController
         if seeker_user.friendship_request_pending? user_result
           friendship_request = FriendshipRequest.find_by(sender_user_id: user_result.id, receiver_user_id: seeker_user.id)
           update_user_hash_friendship_request_pending(user_found, friendship_request.id)
-          #logger.debug "[API] User Result (pending friendship request) #{user_found}"
           users_array << user_found
           next
         end

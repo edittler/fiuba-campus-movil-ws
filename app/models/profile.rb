@@ -16,19 +16,11 @@
 #
 
 class Profile < ActiveRecord::Base
-
-belongs_to :user
-
-has_one :nationality, dependent: :destroy
-
-has_one :city, dependent: :destroy
-
-has_one :phone, dependent: :destroy
-
-has_one :location, dependent: :destroy
-
-has_many :jobs, dependent: :destroy
-
-has_many :educations, dependent: :destroy
-
+  belongs_to :user
+  has_one :nationality, dependent: :destroy
+  has_one :city, dependent: :destroy
+  has_one :phone, dependent: :destroy
+  has_one :location, dependent: :destroy
+  has_many :jobs, dependent: :destroy
+  has_many :educations, dependent: :destroy
 end
