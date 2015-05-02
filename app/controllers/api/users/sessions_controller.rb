@@ -20,7 +20,7 @@ class Api::Users::SessionsController < Api::ApiController
     end
 
     unless @user.approved
-      render status: :unauthorized,
+      render status: :ok,
              json: { result: "unapprovedUser", message: "The user has not been approved." }
       return
     end
@@ -53,7 +53,7 @@ class Api::Users::SessionsController < Api::ApiController
     end
 
     def render_invalid_email_or_password
-      render status: :unauthorized,
+      render status: :ok,
              json: { result: "invalidCredentials", message: "Invalid email or password" }
     end
 
