@@ -19,12 +19,19 @@
 # To learn more, please read the Rails Internationalization guide
 # available at http://guides.rubyonrails.org/i18n.html.
 
-en:
+es:
+  activerecord:
+    attributes:
+      admin:
+        email: "Correo electrónico"
+        password: "Contraseña"
+        password_confirmation: "Confirmación de contraseña"
+        remember_me: "Recordarme"
   admins:
     passwords:
-      new_title: "Forgot your password?"
+      new_title: "¿Olvidó su contraseña?"
     registrations:
-      new_title: "Sign up"
-      characters_minimum: "%{number} characters minimum"
+      characters_minimum: "%{number} caracteres como mínimo"
+      new_title: "Registrarse"
     sessions:
-      title: "Log in"
+      title: "Iniciar sesión"
