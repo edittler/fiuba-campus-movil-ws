@@ -1,8 +1,8 @@
 {
 	"id": "1",
-	"carrera": "Ingenieria en Informatica",
+	"career": "Ingenieria en Informatica",
 	"plan": "1986",
-	"materias": [
+	"subjects": [
 		"61.03", "62.01", "75.40",
 		"61.08", "62.03", "63.01", "75.41",
 		"62.15", "66.02", "66.70", "75.07", "75.12",
