@@ -1,0 +1,19 @@
+{
+	"carreras": [
+		{
+			"id": "1",
+			"carrera": "Ingenieria en Informatica",
+			"plan": "1986"
+		},
+		{
+			"id": "2",
+			"carrera": "Licenciatura en Analisis de Sistemas",
+			"plan": "1986"
+		},
+		{
+			"id": "3",
+			"carrera": "Licenciatura en Analisis de Sistemas",
+			"plan": "2014"
+		}
+	]
+}
