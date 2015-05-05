@@ -57,26 +57,44 @@ class Api::Users::ProfileController < Api::ApiController
   end
 
   def upload_picture
+
+    unless exists_upload_picture_required_params
+      render_missing_required_params
+      return
+    end
+
     user = User.find_by_authentication_token(params[:user_token])
-    result = { status: "failed" }
+    result = {
+      result: "error",
+      message: "An error has occurred. Try again with another image"
+    }
 
     begin
       params[:image] = parse_image_data(params[:image]) if params[:image]
       user.profile.picture = params[:image]
 
       if user.profile.save
-        result[:status] = "success"
+        result[:result] = "ok"
+        result[:message] = "Upload profile image success"
+        render status: :ok, json: result.to_json
+        return
       end
     rescue Exception => e
       logger.error "#{e.message}"
     end
 
-    render json: result.to_json
+    render status: :internal_server_error, json: result.to_json
   ensure
     clean_tempfile
   end
 
   private
+
+    def exists_upload_picture_required_params
+      image_params = params[:image]
+      return false if image_params.nil?
+      return !( image_params[:filename].nil? or image_params[:content].nil? or image_params[:content_type].nil? )
+    end
 
     def parse_image_data(image_data)
       @tempfile = Tempfile.new('item_image')
