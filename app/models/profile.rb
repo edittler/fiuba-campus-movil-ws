@@ -2,13 +2,17 @@
 #
 # Table name: profiles
 #
-#  id         :integer          not null, primary key
-#  biography  :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  first_name :string
-#  last_name  :string
-#  user_id    :integer
+#  id                   :integer          not null, primary key
+#  user_id              :integer
+#  first_name           :string
+#  last_name            :string
+#  biography            :string
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  picture_file_name    :string
+#  picture_content_type :string
+#  picture_file_size    :integer
+#  picture_updated_at   :datetime
 #
 # Indexes
 #
@@ -17,6 +21,13 @@
 
 class Profile < ActiveRecord::Base
   belongs_to :user
+
+  has_attached_file :picture,
+                    :styles => { :medium => "300x300>", :thumb => "100x100>" },
+                    :default_url => "/images/:style/missing.png"
+  validates_attachment_content_type :picture,
+                                    :content_type => /\Aimage\/.*\Z/
+
   has_one :nationality, dependent: :destroy
   has_one :city, dependent: :destroy
   has_one :phone, dependent: :destroy

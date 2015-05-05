@@ -2,13 +2,17 @@
 #
 # Table name: profiles
 #
-#  id         :integer          not null, primary key
-#  biography  :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  first_name :string
-#  last_name  :string
-#  user_id    :integer
+#  id                   :integer          not null, primary key
+#  user_id              :integer
+#  first_name           :string
+#  last_name            :string
+#  biography            :string
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  picture_file_name    :string
+#  picture_content_type :string
+#  picture_file_size    :integer
+#  picture_updated_at   :datetime
 #
 # Indexes
 #

@@ -41,6 +41,9 @@ gem 'devise'
 #Adds group and membership functionality to Rails models.
 gem 'groupify'
 
+# Easy file attachment library for Active Record
+gem "paperclip", "~> 4.2"
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

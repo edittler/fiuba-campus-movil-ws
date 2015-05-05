@@ -90,9 +90,10 @@ Rails.application.routes.draw do
       # Users operations
       get    'search'   => 'search_engine#basic_search'
 
-      # Single user operations 
-      get    ':id'      => 'profile#show'
-      post   ':id/edit' => 'profile#edit'
+      # Single user operations
+      get    ':id'                    => 'profile#show'
+      post   ':id/edit'               => 'profile#edit'
+      post   'upload_profile_picture' => 'profile#upload_picture'
     end
 
     namespace :jobs do
