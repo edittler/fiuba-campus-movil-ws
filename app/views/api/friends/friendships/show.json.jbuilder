@@ -11,6 +11,7 @@ json.data do
     json.email      friend.email
     json.first_name friend.profile.first_name || ""
     json.last_name  friend.profile.last_name || ""
+    json.picture    friend.profile.picture.url(:thumb) || ""
   end
 
   json.users_with_pending_friendship_request @pending_friendship_requests do |request|
@@ -18,6 +19,7 @@ json.data do
     json.email                 request.sender_user.email
     json.first_name            request.sender_user.profile.first_name || ""
     json.last_name             request.sender_user.profile.last_name || ""
+    json.picture               request.sender_user.profile.picture.url(:thumb) || ""
     json.friendship_request_id request.id
   end
 
@@ -26,6 +28,7 @@ json.data do
     json.email                 request.receiver_user.email
     json.first_name            request.receiver_user.profile.first_name || ""
     json.last_name             request.receiver_user.profile.last_name || ""
+    json.picture               request.receiver_user.profile.picture.url(:thumb) || ""
     json.friendship_request_id request.id
   end
 

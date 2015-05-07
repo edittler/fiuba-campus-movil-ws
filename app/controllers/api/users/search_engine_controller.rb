@@ -47,7 +47,8 @@ class Api::Users::SearchEngineController < Api::ApiController
         id:         user.id,
         email:      user.email,
         first_name: user.profile.first_name,
-        last_name:  user.profile.last_name
+        last_name:  user.profile.last_name,
+        picture:    user.profile.picture.url(:thumb)
       }
     end
 
