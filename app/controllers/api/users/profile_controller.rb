@@ -24,34 +24,30 @@ class Api::Users::ProfileController < Api::ApiController
     end
   end
 
-  def edit
-
+  def update
     logger.debug "[API] Edit User: #{params}"
-    @profile = Profile.find_by( user_id: params[:id].to_i )
 
-    profileUpdates = params[:data][:profile]
+    updates = params[:data][:profile]
 
-    @profile.first_name = profileUpdates[:first_name] unless profileUpdates[:first_name].nil?
-    @profile.last_name = profileUpdates[:last_name] unless profileUpdates[:last_name].nil?
-    @profile.biography = profileUpdates[:biography] unless profileUpdates[:biography].nil?
-    @profile.save
+    user = User.find( params[:id].to_i )
 
-    @nationality = Nationality.find_by( profile_id: @profile.id )
-    @nationality.nationality = profileUpdates[:nationality] unless profileUpdates[:nationality].nil?
-    @nationality.save
+    user.profile.first_name = updates[:first_name] unless updates[:first_name].nil?
+    user.profile.last_name = updates[:last_name] unless updates[:last_name].nil?
+    user.profile.biography = updates[:biography] unless updates[:biography].nil?
+    user.profile.save
 
-    @city = City.find_by( profile_id: @profile.id )
-    @city.name = profileUpdates[:city] unless profileUpdates[:city].nil?
-    @city.save
+    user.profile.nationality.nationality = updates[:nationality] unless updates[:nationality].nil?
+    user.profile.nationality.save
 
-    @phone = Phone.find_by( profile_id: @profile.id )
-    @phone.number = profileUpdates[:phone] unless profileUpdates[:phone].nil?
-    @phone.save
+    user.profile.city.name = updates[:city] unless updates[:city].nil?
+    user.profile.city.save
 
-    @academic_info = AcademicInfo.find_by( user_id: params[:id].to_i )
-    @academic_info.padron = profileUpdates[:padron] unless profileUpdates[:padron].nil?
-    @academic_info.save
-    
+    user.profile.phone.number = updates[:phone] unless updates[:phone].nil?
+    user.profile.phone.save
+
+    user.academic_info.padron = updates[:padron] unless updates[:padron].nil?
+    user.academic_info.save
+
     render status: :created,
             json: { result: "ok", message: "Profile has been updated" }
   end

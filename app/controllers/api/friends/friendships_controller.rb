@@ -1,7 +1,7 @@
 class Api::Friends::FriendshipsController < Api::ApiController
 
   # GET /api/friends
-  def show
+  def index
     user = User.find_by_authentication_token(params[:user_token])
     logger.debug "[API] User sender: #{user.attributes.inspect}"
 

@@ -92,7 +92,7 @@ Rails.application.routes.draw do
 
       # Single user operations
       get    ':id'                    => 'profile#show'
-      post   ':id/edit'               => 'profile#edit'
+      post   ':id/edit'               => 'profile#update'
       post   'upload_profile_picture' => 'profile#upload_picture'
     end
 
@@ -113,8 +113,8 @@ Rails.application.routes.draw do
     end
 
     namespace :friends do
-      get  ''                            => 'friendships#show'
-      get  'pending_friendship_requests' => 'friendship_requests#show'
+      get  ''                            => 'friendships#index'
+      get  'pending_friendship_requests' => 'friendship_requests#index'
       post 'send_friendship_request'     => 'friendship_requests#create'
       post 'respond_friendship_request'  => 'friendship_requests#reply'
     end
