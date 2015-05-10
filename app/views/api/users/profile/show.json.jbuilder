@@ -9,7 +9,7 @@ json.data do
   json.profile do
     json.first_name  @user.profile.first_name || ""
     json.last_name   @user.profile.last_name || ""
-    json.picture     @user.profile.picture.url(:thumb) || ""
+    json.picture     @user.profile.picture.url(:small) || ""
     json.biography   @user.profile.biography || ""
     json.nationality @user.profile.nationality.nationality || ""
     json.city        @user.profile.city.name || ""

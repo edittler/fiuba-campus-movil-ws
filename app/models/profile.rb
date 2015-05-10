@@ -23,10 +23,14 @@ class Profile < ActiveRecord::Base
   belongs_to :user
 
   has_attached_file :picture,
-                    :styles => { :medium => "300x300>", :thumb => "100x100>" },
-                    :default_url => ""
+                    styles: {
+                              medium: "600x600>",
+                              small:  "300x300>",
+                              thumb: "100x100>"
+                            },
+                    default_url: ""
   validates_attachment_content_type :picture,
-                                    :content_type => /\Aimage\/.*\Z/
+                                    content_type: /\Aimage\/.*\Z/
 
   has_one :nationality, dependent: :destroy
   has_one :city, dependent: :destroy
