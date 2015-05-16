@@ -50,4 +50,19 @@ json.data do
 
   end
 
+  json.users_by_career @users_by_career do |user|
+    json.user_id    user[:id]
+    json.email      user[:email]
+    json.first_name user[:first_name] || ""
+    json.last_name  user[:last_name] || ""
+    json.picture    user[:picture] || ""
+    json.match      user[:match]
+    json.friendship user[:friendship] || "noFriends"
+
+    unless user[:friendship_request_id].nil?
+      json.friendship_request_id user[:friendship_request_id]
+    end
+
+  end
+
 end

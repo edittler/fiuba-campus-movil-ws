@@ -14,6 +14,7 @@ class Api::Users::SearchEngineController < Api::ApiController
     results_by_name = Array.new
     results_by_city = Array.new
     results_by_nationality = Array.new
+    results_by_career = Array.new
 
     if params[:query].nil?
       results_by_name = User.includes(:profile).all
@@ -21,16 +22,19 @@ class Api::Users::SearchEngineController < Api::ApiController
       name_conditions = "LOWER(profiles.first_name) LIKE ? OR LOWER(profiles.last_name) LIKE ?"
       city_conditions = "LOWER(profiles.first_name) NOT LIKE ? AND LOWER(profiles.last_name) NOT LIKE ? AND LOWER(cities.name) LIKE ?"
       nationality_conditions = "LOWER(profiles.first_name) NOT LIKE ? AND LOWER(profiles.last_name) NOT LIKE ? AND LOWER(nationalities.nationality) LIKE ?"
+      career_conditions = "LOWER(profiles.first_name) NOT LIKE ? AND LOWER(profiles.last_name) NOT LIKE ? AND LOWER(nationalities.nationality) NOT LIKE ? AND LOWER(academic_infos.carreer) LIKE ?"
       query = '%' + params[:query].downcase + '%'
       #logger.debug "[API] Where query: #{query}"
       results_by_name = User.joins(:profile).where(name_conditions, query, query)
       results_by_city = User.joins(profile: [:city]).where(city_conditions, query, query, query)
-      results_by_nationality = User.joins(profile: [:nationality]).where(nationality_conditions, query, query, query)
+      results_by_nationality = User.joins(profile: [:city, :nationality]).where(nationality_conditions, query, query, query)
+      results_by_career = User.joins(:academic_info, profile: [:city, :nationality]).where(career_conditions, query, query, query, query)
     end
 
     @users_by_name = user_results_by_name(user, results_by_name)
     @users_by_city = user_results_by_city(user, results_by_city)
     @users_by_nationality = user_results_by_nationality(user, results_by_nationality)
+    @users_by_career = user_results_by_career(user, results_by_career)
 
     render status: :ok
   end
@@ -163,6 +167,40 @@ class Api::Users::SearchEngineController < Api::ApiController
         users_array << user_found
       }
       logger.debug "[API] Users by nationality found: #{users_array}"
+      return users_array
+    end
+
+    def user_results_by_career(seeker_user, search_result)
+      users_array = Array.new
+
+      search_result.each { |user_result|
+        next if seeker_user.id == user_result.id
+
+        user_found = user_hash user_result
+        user_found[:match] = user_result.academic_info.carreer
+
+        if seeker_user.friend? user_result
+          update_user_hash_friends user_found
+          users_array << user_found
+          next
+        end
+
+        if seeker_user.friendship_request_sent? user_result
+          update_user_hash_friendship_request_sent user_found
+          users_array << user_found
+          next
+        end
+
+        if seeker_user.friendship_request_pending? user_result
+          friendship_request = FriendshipRequest.find_by(sender_user_id: user_result.id, receiver_user_id: seeker_user.id)
+          update_user_hash_friendship_request_pending(user_found, friendship_request.id)
+          users_array << user_found
+          next
+        end
+
+        users_array << user_found
+      }
+      logger.debug "[API] Users by career found: #{users_array}"
       return users_array
     end
 
