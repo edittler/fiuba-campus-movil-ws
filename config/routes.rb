@@ -120,8 +120,9 @@ Rails.application.routes.draw do
     end
 
     namespace :groups do
-      get  '' => 'groups#index'
-      post '' => 'groups#create'
+      get  ''            => 'groups#index'
+      post ''            => 'groups#create'
+      get  ':id/members' => 'members#index'
     end
 
   end
