@@ -122,6 +122,7 @@ Rails.application.routes.draw do
     namespace :groups do
       get  ''            => 'groups#index'
       post ''            => 'groups#create'
+      get  'search'      => 'search_engine#basic_search'
       get  ':id/members' => 'members#index'
     end
 
