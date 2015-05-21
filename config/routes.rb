@@ -124,6 +124,7 @@ Rails.application.routes.draw do
       post ''            => 'groups#create'
       get  'search'      => 'search_engine#basic_search'
       get  ':id/members' => 'members#index'
+      post ':id/join'    => 'members#join'
     end
 
   end
