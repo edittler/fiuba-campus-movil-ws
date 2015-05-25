@@ -12,6 +12,10 @@ json.data do
     json.first_name friend.profile.first_name || ""
     json.last_name  friend.profile.last_name || ""
     json.picture    friend.profile.picture.url(:small) || ""
+    json.latitude   friend.profile.location.latitude || ""
+    json.longitude   friend.profile.location.longitude || ""
+    json.last_update_time   friend.profile.location.last_update_time || ""
+    json
   end
 
   json.users_with_pending_friendship_request @pending_friendship_requests do |request|
