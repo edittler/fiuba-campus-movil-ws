@@ -26,6 +26,7 @@ json.data do
     json.location do
       json.latitude @user.profile.location.latitude || ""
       json.longitude @user.profile.location.longitude || ""
+      json.last_update_time @user.profile.location.last_update_time || ""
     end
 
     json.jobs @user.profile.jobs do |job|

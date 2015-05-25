@@ -45,6 +45,11 @@ class Api::Users::ProfileController < Api::ApiController
     user.profile.phone.number = updates[:phone] unless updates[:phone].nil?
     user.profile.phone.save
 
+    user.profile.location.latitude = updates[:latitude]
+    user.profile.location.longitude = updates[:longitude]
+    user.profile.location.last_update_time = updates[:last_update_time]
+    user.profile.location.save
+
     user.academic_info.padron = updates[:padron] unless updates[:padron].nil?
     user.academic_info.save
 
