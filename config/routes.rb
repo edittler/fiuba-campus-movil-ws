@@ -125,6 +125,14 @@ Rails.application.routes.draw do
       get  'search'      => 'search_engine#basic_search'
       get  ':id/members' => 'members#index'
       post ':id/join'    => 'members#join'
+
+      # Discussions routes
+      get  ':id/discussions' => 'discussions/discussions#index'
+      post ':id/discussions' => 'discussions/discussions#create'
+      get  ':id/discussions/:discussion_id' => 'discussions/discussions#show'
+
+      # Discussion and comments routes
+      post ':id/discussions/:discussion_id/comments' => 'discussions/comments#create'
     end
 
   end

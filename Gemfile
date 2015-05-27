@@ -3,7 +3,7 @@ ruby "2.1.5"
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.0'
 
 # Use postgre as the database for Active Record
 gem 'pg'
@@ -43,6 +43,10 @@ gem 'groupify'
 
 # Easy file attachment library for Active Record
 gem "paperclip", "~> 4.2"
+
+# Por ahora lo dejo comentado
+#gem 'forem', :github => "radar/forem", :branch => "rails4"
+#gem 'will_paginate', '3.0.5'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
