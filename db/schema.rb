@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150525105041) do
+ActiveRecord::Schema.define(version: 20150528003103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,17 @@ ActiveRecord::Schema.define(version: 20150525105041) do
     t.integer  "profile_id"
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.text     "text"
+    t.integer  "user_id"
+    t.integer  "discussion_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "comments", ["discussion_id"], name: "index_comments_on_discussion_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
+
   create_table "date_intervals", force: :cascade do |t|
     t.datetime "init"
     t.datetime "end"
@@ -62,6 +73,15 @@ ActiveRecord::Schema.define(version: 20150525105041) do
 
   add_index "date_intervals", ["education_id"], name: "index_date_intervals_on_education_id", using: :btree
 
+  create_table "discussions", force: :cascade do |t|
+    t.string   "subject"
+    t.integer  "forum_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "discussions", ["forum_id"], name: "index_discussions_on_forum_id", using: :btree
+
   create_table "educations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -70,6 +90,16 @@ ActiveRecord::Schema.define(version: 20150525105041) do
   end
 
   add_index "educations", ["profile_id"], name: "index_educations_on_profile_id", using: :btree
+
+  create_table "forums", force: :cascade do |t|
+    t.string   "title"
+    t.text     "description"
+    t.integer  "group_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "forums", ["group_id"], name: "index_forums_on_group_id", using: :btree
 
   create_table "friendship_requests", force: :cascade do |t|
     t.integer  "sender_user_id",   null: false
@@ -191,8 +221,12 @@ ActiveRecord::Schema.define(version: 20150525105041) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "academic_infos", "users"
+  add_foreign_key "comments", "discussions"
+  add_foreign_key "comments", "users"
   add_foreign_key "date_intervals", "educations"
+  add_foreign_key "discussions", "forums"
   add_foreign_key "educations", "profiles"
+  add_foreign_key "forums", "groups"
   add_foreign_key "institutes", "educations"
   add_foreign_key "jobs", "profiles"
 end
