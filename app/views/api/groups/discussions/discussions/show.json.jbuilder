@@ -10,6 +10,6 @@ json.data do
 	    json.message       	comment.text
 	    json.image		 	"TODO"
 	    json.author			"TODO"
-	    json.creationDate	"TODO"
+	    json.creationDate	comment.created_at
     end
 end

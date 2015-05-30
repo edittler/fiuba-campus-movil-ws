@@ -10,6 +10,6 @@ json.data do
 	    json.name        	discussion.subject
 	    json.description 	""
 	    json.author			"TODO"
-	    json.creationDate	"TODO"
+	    json.creationDate	discussion.created_at
   	end
 end
