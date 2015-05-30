@@ -3,9 +3,14 @@ class Api::Groups::Discussions::DiscussionsController < Api::ApiController
   # GET /api/groups/:id/discussions
   def index
   	group = Group.find_by(id: params[:id].to_i)
+  	if group.nil?
+  		render status: :error,
+           json: { result: "error", message: "Group does not exist" }
+        return
+    end	
   	if group.forum.nil?
   		render status: :ok,
-             json: {result: "ok", message: "No discussions to show"}
+             json: {result: "ok", message: "No discussions to show", data: { groupDiscussions: [] } }
       return
     end
 
@@ -15,7 +20,13 @@ class Api::Groups::Discussions::DiscussionsController < Api::ApiController
 
   # GET /api/groups/:id/discussions/:discussion_id
   def show
-  	discussion = Discussion.find_by(id: params[:discussion_id].to_i)  	
+  	discussion = Discussion.find_by(id: params[:discussion_id].to_i)    	
+  	if discussion.nil?
+  		render status: :error,
+           json: { result: "error", message: "Discussion does not exist" }
+        return
+    end	
+
     @comments = discussion.comments
     render status: :ok
   end
@@ -29,7 +40,12 @@ class Api::Groups::Discussions::DiscussionsController < Api::ApiController
     end
 
     myUser = User.find_by_authentication_token(params[:user_token])
-  	group = Group.find_by(id: params[:id].to_i)
+    group = Group.find_by(id: params[:id].to_i)
+    if group.nil?
+  		render status: :error,
+           json: { result: "error", message: "Group does not exist" }
+        return
+    end
 
   	if !myUser.in_group?(group)
       render status: :conflict,

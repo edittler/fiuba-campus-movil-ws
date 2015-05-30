@@ -7,7 +7,13 @@ class Api::Groups::Discussions::CommentsController < Api::ApiController
     	end
 
     	creatorUser = User.find_by_authentication_token(params[:user_token])
-		discussion = Discussion.find_by(id: params[:discussion_id].to_i) 
+		discussion = Discussion.find_by(id: params[:discussion_id].to_i)
+		if discussion.nil?
+	  		render status: :error,
+	           json: { result: "error", message: "Discussion does not exist" }
+	        return
+    	end	
+
 		comment = Comment.create(text: params[:message])
 		comment.user = creatorUser 	
     	discussion.comments << comment
