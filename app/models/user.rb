@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
 
   has_one :profile, dependent: :destroy
   has_one :academic_info, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :discussions, dependent: :destroy
 
   # Friendship Request model relation
   has_many :sent_friendship_requests, class_name: "FriendshipRequest",

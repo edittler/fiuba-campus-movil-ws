@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528003103) do
+ActiveRecord::Schema.define(version: 20150530153026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,9 +78,11 @@ ActiveRecord::Schema.define(version: 20150528003103) do
     t.integer  "forum_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "user_id"
   end
 
   add_index "discussions", ["forum_id"], name: "index_discussions_on_forum_id", using: :btree
+  add_index "discussions", ["user_id"], name: "index_discussions_on_user_id", using: :btree
 
   create_table "educations", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -225,6 +227,7 @@ ActiveRecord::Schema.define(version: 20150528003103) do
   add_foreign_key "comments", "users"
   add_foreign_key "date_intervals", "educations"
   add_foreign_key "discussions", "forums"
+  add_foreign_key "discussions", "users"
   add_foreign_key "educations", "profiles"
   add_foreign_key "forums", "groups"
   add_foreign_key "institutes", "educations"

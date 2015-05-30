@@ -9,7 +9,9 @@ json.data do
 	    json.id    			discussion.id
 	    json.name        	discussion.subject
 	    json.description 	""
-	    json.author			"TODO"
+	    json.author_id			discussion.user.id
+      	json.author_first_name 	discussion.user.profile.first_name || ""
+      	json.author_last_name  	discussion.user.profile.last_name || ""
 	    json.creationDate	discussion.created_at
   	end
 end

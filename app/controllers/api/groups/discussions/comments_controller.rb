@@ -6,8 +6,10 @@ class Api::Groups::Discussions::CommentsController < Api::ApiController
       		return
     	end
 
+    	creatorUser = User.find_by_authentication_token(params[:user_token])
 		discussion = Discussion.find_by(id: params[:discussion_id].to_i) 
-		comment = Comment.create(text: params[:message]) 	
+		comment = Comment.create(text: params[:message])
+		comment.user = creatorUser 	
     	discussion.comments << comment
 
 		render status: :created,

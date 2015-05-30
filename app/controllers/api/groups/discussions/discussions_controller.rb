@@ -28,10 +28,10 @@ class Api::Groups::Discussions::DiscussionsController < Api::ApiController
       return
     end
 
-    user = User.find_by_authentication_token(params[:user_token])
+    myUser = User.find_by_authentication_token(params[:user_token])
   	group = Group.find_by(id: params[:id].to_i)
 
-  	if !user.in_group?(group)
+  	if !myUser.in_group?(group)
       render status: :conflict,
              json: {result: "error", message: "User is not in the group"}
       return
@@ -41,6 +41,7 @@ class Api::Groups::Discussions::DiscussionsController < Api::ApiController
   		group.forum = Forum.create(title: "", description: "")
     end
   	discussion = Discussion.create(subject: params[:subject])
+  	discussion.user = myUser
   	group.forum.discussions << discussion
 
     render status: :created,
