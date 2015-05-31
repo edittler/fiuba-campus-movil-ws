@@ -43,6 +43,8 @@ gem 'groupify'
 
 # Easy file attachment library for Active Record
 gem "paperclip", "~> 4.2"
+# Using Dropbox as paperclip storage
+gem "paperclip-dropbox", ">= 1.1.7"
 
 # Use Unicorn as the app server
 # gem 'unicorn'

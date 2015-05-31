@@ -28,7 +28,11 @@ class Profile < ActiveRecord::Base
                               small:  "300x300>",
                               thumb: "100x100>"
                             },
-                    default_url: ""
+                    path: ":style/:id_:updated_at_:filename",
+                    default_url: "",
+                    storage: :dropbox,
+                    dropbox_credentials: Rails.root.join("config/dropbox.yml"),
+                    dropbox_visibility: 'private'
   validates_attachment_content_type :picture,
                                     content_type: /\Aimage\/.*\Z/
 
