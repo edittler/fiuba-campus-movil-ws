@@ -13,7 +13,7 @@ class Api::Groups::Discussions::DiscussionsController < Api::ApiController
              json: {result: "ok", message: "No discussions to show", data: { groupDiscussions: [] } }
       return
     end
-
+    
   	@discussions = group.forum.discussions
     render status: :ok
   end

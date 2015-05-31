@@ -110,15 +110,15 @@ class User < ActiveRecord::Base
         return "yourself"
       end
       if self.friend? user
-        return "friends"
+        return "F"
       end
       if self.friendship_request_sent? user
-        return "friendshipRequestSent"
+        return "R"
       end
       if self.friendship_request_pending? user
-        return "pendingFriendshipRequest"
+        return "W"
       end
-      return "noFriends"
+      return "U"
   end
 
   private
