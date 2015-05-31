@@ -1,6 +1,6 @@
 class Api::Groups::Discussions::CommentsController < Api::ApiController
 
-	def create
+	def create_group_comment
 		unless exists_create_comment_required_params?
       		render_missing_required_params
       		return

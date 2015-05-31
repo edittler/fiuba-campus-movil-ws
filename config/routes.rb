@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -94,6 +95,10 @@ Rails.application.routes.draw do
       get    ':id'                    => 'profile#show'
       post   ':id/edit'               => 'profile#update'
       post   'upload_profile_picture' => 'profile#upload_picture'
+
+      #Wall comments operations
+      get ':id/wall/comments' => 'wall/comments#index'
+      post ':id/wall/comments' => 'wall/comments#create_wall_comment'
     end
 
     namespace :jobs do
@@ -132,7 +137,7 @@ Rails.application.routes.draw do
       get  ':id/discussions/:discussion_id' => 'discussions/discussions#show'
 
       # Discussion and comments routes
-      post ':id/discussions/:discussion_id/comments' => 'discussions/comments#create'
+      post ':id/discussions/:discussion_id/comments' => 'discussions/comments#create_group_comment'
     end
 
   end

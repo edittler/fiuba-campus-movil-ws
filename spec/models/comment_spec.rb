@@ -8,11 +8,13 @@
 #  discussion_id :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  wall_id       :integer
 #
 # Indexes
 #
 #  index_comments_on_discussion_id  (discussion_id)
 #  index_comments_on_user_id        (user_id)
+#  index_comments_on_wall_id        (wall_id)
 #
 
 require 'rails_helper'

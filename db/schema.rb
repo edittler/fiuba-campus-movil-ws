@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150530153026) do
+ActiveRecord::Schema.define(version: 20150531082307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,10 +57,12 @@ ActiveRecord::Schema.define(version: 20150530153026) do
     t.integer  "discussion_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.integer  "wall_id"
   end
 
   add_index "comments", ["discussion_id"], name: "index_comments_on_discussion_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
+  add_index "comments", ["wall_id"], name: "index_comments_on_wall_id", using: :btree
 
   create_table "date_intervals", force: :cascade do |t|
     t.datetime "init"
@@ -222,9 +224,18 @@ ActiveRecord::Schema.define(version: 20150530153026) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "walls", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "user_id"
+  end
+
+  add_index "walls", ["user_id"], name: "index_walls_on_user_id", using: :btree
+
   add_foreign_key "academic_infos", "users"
   add_foreign_key "comments", "discussions"
   add_foreign_key "comments", "users"
+  add_foreign_key "comments", "walls"
   add_foreign_key "date_intervals", "educations"
   add_foreign_key "discussions", "forums"
   add_foreign_key "discussions", "users"
@@ -232,4 +243,5 @@ ActiveRecord::Schema.define(version: 20150530153026) do
   add_foreign_key "forums", "groups"
   add_foreign_key "institutes", "educations"
   add_foreign_key "jobs", "profiles"
+  add_foreign_key "walls", "users"
 end

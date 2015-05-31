@@ -19,6 +19,7 @@ class Api::Users::RegistrationsController < Api::ApiController
     # Create user
     user = User.new(user_params)
     if user.save
+      user.create_wall
       user.create_profile(profile_params)
       user.profile.create_city
       user.profile.create_nationality
