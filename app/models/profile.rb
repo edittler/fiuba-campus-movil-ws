@@ -42,4 +42,12 @@ class Profile < ActiveRecord::Base
   has_one :location, dependent: :destroy
   has_many :jobs, dependent: :destroy
   has_many :educations, dependent: :destroy
+
+  def picture_url
+    if picture.exists?
+      return picture.url(:small)
+    end
+    return ""
+  end
+
 end
