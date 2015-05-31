@@ -12,7 +12,7 @@ json.data do
     json.email                 request.sender_user.email
     json.first_name            request.sender_user.profile.first_name || ""
     json.last_name             request.sender_user.profile.last_name || ""
-    json.picture               request.sender_user.profile.picture.url(:small) || ""
+    json.picture               request.sender_user.profile.picture_url
   end
 
 end

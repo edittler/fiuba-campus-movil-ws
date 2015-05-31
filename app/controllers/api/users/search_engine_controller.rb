@@ -52,7 +52,7 @@ class Api::Users::SearchEngineController < Api::ApiController
         email:      user.email,
         first_name: user.profile.first_name,
         last_name:  user.profile.last_name,
-        picture:    user.profile.picture.url(:small)
+        picture:    user.profile.picture_url
       }
     end
 
