@@ -102,6 +102,25 @@ class User < ActiveRecord::Base
     FriendshipRequest.exists?(sender_user_id: self.id, receiver_user_id: user.id)
   end
 
+  def getFriendshipStatusToSend(user)
+     if user.nil?      
+        return "User not found"
+      end
+      if self.id == user.id
+        return "yourself"
+      end
+      if self.friend? user
+        return "friends"
+      end
+      if self.friendship_request_sent? user
+        return "friendshipRequestSent"
+      end
+      if self.friendship_request_pending? user
+        return "pendingFriendshipRequest"
+      end
+      return "noFriends"
+  end
+
   private
 
     def generate_authentication_token

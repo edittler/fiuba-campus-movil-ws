@@ -27,6 +27,7 @@ class Api::Groups::Discussions::DiscussionsController < Api::ApiController
         return
     end	
 
+    @myUser = User.find_by_authentication_token(params[:user_token])    
     @comments = discussion.comments
     render status: :ok
   end
@@ -71,6 +72,5 @@ class Api::Groups::Discussions::DiscussionsController < Api::ApiController
       	return false
       end
       return true
-    end
-
+    end    
 end
