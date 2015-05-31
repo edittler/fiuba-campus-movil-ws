@@ -97,7 +97,7 @@ Rails.application.routes.draw do
       post   'upload_profile_picture' => 'profile#upload_picture'
 
       #Wall comments operations
-      get ':id/wall/comments' => 'wall/comments#index'
+      get ':id/wall/comments' => 'wall/comments#show'
       post ':id/wall/comments' => 'wall/comments#create_wall_comment'
     end
 
