@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150531082307) do
+ActiveRecord::Schema.define(version: 20150601083236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,6 +202,20 @@ ActiveRecord::Schema.define(version: 20150531082307) do
 
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
+  create_table "uploaded_data", force: :cascade do |t|
+    t.string   "name"
+    t.string   "url"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "group_id"
+    t.string   "uploader_name"
+    t.string   "file_type"
+    t.integer  "user_id"
+  end
+
+  add_index "uploaded_data", ["group_id"], name: "index_uploaded_data_on_group_id", using: :btree
+  add_index "uploaded_data", ["user_id"], name: "index_uploaded_data_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -243,5 +257,7 @@ ActiveRecord::Schema.define(version: 20150531082307) do
   add_foreign_key "forums", "groups"
   add_foreign_key "institutes", "educations"
   add_foreign_key "jobs", "profiles"
+  add_foreign_key "uploaded_data", "groups"
+  add_foreign_key "uploaded_data", "users"
   add_foreign_key "walls", "users"
 end

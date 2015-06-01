@@ -138,6 +138,12 @@ Rails.application.routes.draw do
 
       # Discussion and comments routes
       post ':id/discussions/:discussion_id/comments' => 'discussions/comments#create_group_comment'
+
+      # uploaded_data aka FILES ( but thats a reserved keyword)
+      get  ':id/uploaded_data' => 'uploaded_data/uploaded_data#index'
+      post ':id/uploaded_data' => 'uploaded_data/uploaded_data#create'
+      #get  ':id/uploaded_data/:uploaded_data_id' => 'uploaded_data/uploaded_data#show'
+
     end
 
   end
