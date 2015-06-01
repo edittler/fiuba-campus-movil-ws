@@ -1,6 +1,6 @@
-class Api::Groups::UploadedData::UploadedData < Api::ApiController
+class Api::Groups::UploadedData::UploadedDataController < Api::ApiController
 
-  # GET /api/groups/:id/uploaded_datum
+  # GET /api/groups/:id/uploaded_data
   def index
     group = Group.find_by(id: params[:id].to_i)
     if group.nil?
@@ -65,7 +65,6 @@ class Api::Groups::UploadedData::UploadedData < Api::ApiController
   private
 
     def exists_create_file_required_params?
-      if params[:uploaded_datum].nil? return false
       if params[:uploaded_datum][:name].nil? or params[:uploaded_datum][:url].nil? or params[:uploaded_datum][:type].nil?
         return false
       end
