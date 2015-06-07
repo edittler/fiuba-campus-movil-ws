@@ -71,7 +71,7 @@ class Api::Groups::UploadedData::UploadedDataController < Api::ApiController
   private
 
     def exists_create_file_required_params?
-      if params[:uploaded_datum][:name].nil? or params[:uploaded_datum][:url].nil? or params[:uploaded_datum][:type].nil?
+      if params[:uploaded_datum][:name].nil? or params[:uploaded_datum][:url].nil? #or params[:uploaded_datum][:type].nil?
         return false
       end
       return true
@@ -80,6 +80,6 @@ class Api::Groups::UploadedData::UploadedDataController < Api::ApiController
     def input_values_into_uploaded_datum(uploaded_datum,uploaded_datum_params)
       uploaded_datum.name = uploaded_datum_params[:name]
       uploaded_datum.url = uploaded_datum_params[:url]
-      uploaded_datum.file_type = uploaded_datum_params[:type]
+      #uploaded_datum.file_type = uploaded_datum_params[:type]
     end
 end
