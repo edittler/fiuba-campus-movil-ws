@@ -46,6 +46,12 @@ class Api::Groups::UploadedData::UploadedDataController < Api::ApiController
         return
     end
 
+    if myUser.nil?
+      render status: :error,
+           json: { result: "error", message: "User does not exist" }
+        return
+    end
+
   	if !myUser.in_group?(group)
       render status: :conflict,
              json: {result: "error", message: "User is not in the group"}
