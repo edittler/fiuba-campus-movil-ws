@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150531082307) do
+ActiveRecord::Schema.define(version: 20150607213502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20150531082307) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.integer  "wall_id"
+    t.string   "date"
   end
 
   add_index "comments", ["discussion_id"], name: "index_comments_on_discussion_id", using: :btree

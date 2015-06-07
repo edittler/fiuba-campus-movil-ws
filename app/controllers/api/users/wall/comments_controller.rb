@@ -52,7 +52,7 @@ class Api::Users::Wall::CommentsController < Api::ApiController
       return
     end
 
-    comment = Comment.create(text: params[:message])
+    comment = Comment.create(text: params[:message], date: params[:date])
     comment.user = creatorUser
     wall.comments << comment
 
