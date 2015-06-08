@@ -1,24 +1,87 @@
 <h1>Usuarios de FIUBA Campus Móvil</h1>
 
-<!--%= link_to 'Nuevo usuario', new_admin_user_path %-->
+<dl class="sub-nav tab" data-tab>
+  <dd class="tab-title active"><a href="#panel1">Pendientes</a></dd>
+  <dd class="tab-title"><a href="#panel2">Activos</a></dd>
+  <dd class="tab-title"><a href="#panel3">Todos</a></dd>
+</dl>
 
-<table>
-  <tr>
-    <th>Correo Electrónico</th>
-    <th>Registro aprobado</th>
-    <th colspan="2"></th>
-  </tr>
+<div class="tabs-content">
 
-  <% @users.each do |user| %>
-    <tr>
-      <td><%= user.email %></td>
-      <td><%= user.approved %></td>
-      <td><%= link_to 'Ver', admin_user_path(user) %></td>
-      <!--% unless user.approved %-->
-        <td><%= link_to approve_user(user), admin_user_approve_path(user), method: :post, data: user %></td>
-      <!--% end %-->
-      <!--<td><%= link_to 'Editar', edit_admin_user_path(user) %></td>
-      <td><%= link_to 'Eliminar', admin_user_path(user), method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
-    </tr>
-  <% end %>
-</table>
+  <section class="content active" id="panel1">
+    <table>
+      <tr>
+        <th>Nombre y Apellido</th>
+        <th>Padrón</th>
+        <!--<th>Carrera</th>-->
+        <th>Correo Electrónico</th>
+        <th colspan="1"></th>
+      </tr>
+      <% @users.each do |user| %>
+        <% unless user.approved %>
+          <tr>
+            <td><%= user_full_name user %></td>
+            <td><%= user_padron user %></td>
+            <!--<td><%= user_career user %></td>-->
+            <td><%= user.email %></td>
+            <!--<td><%= link_to 'Ver', admin_user_path(user) %></td>-->
+            <td><%= link_to approve_user(user), admin_user_approve_path(user), method: :post, data: user %></td>
+            <!--<td><%= link_to 'Eliminar', admin_user_path(user), method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
+          </tr>
+        <% end %>
+      <% end %>
+    </table>
+  </section>
+
+  <section class="content" id="panel2">
+    <table>
+      <tr>
+        <th>Nombre y Apellido</th>
+        <th>Padrón</th>
+        <!--<th>Carrera</th>-->
+        <th>Correo Electrónico</th>
+      </tr>
+      <% @users.each do |user| %>
+        <% if user.approved %>
+          <tr>
+            <td><%= user_full_name user %></td>
+            <td><%= user_padron user %></td>
+            <!--<td><%= user_career user %></td>-->
+            <td><%= user.email %></td>
+            <!--<td><%= link_to 'Ver', admin_user_path(user) %></td>-->
+            <!--<td><%= link_to 'Eliminar', admin_user_path(user), method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
+          </tr>
+        <% end %>
+      <% end %>
+    </table>
+  </section>
+
+  <section class="content" id="panel3">
+    <table>
+      <tr>
+        <th>Nombre y Apellido</th>
+        <th>Padrón</th>
+        <!--<th>Carrera</th>-->
+        <th>Correo Electrónico</th>
+        <th>Registro aprobado</th>
+        <th colspan="1"></th>
+      </tr>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user_full_name user %></td>
+          <td><%= user_padron user %></td>
+          <!--<td><%= user_career user %></td>-->
+          <td><%= user.email %></td>
+          <td><%= approve_user_status user %></td>
+          <!--<td><%= link_to 'Ver', admin_user_path(user) %></td>-->
+          <% unless user.approved %>
+            <td><%= link_to approve_user(user), admin_user_approve_path(user), method: :post, data: user %></td>
+          <% end %>
+          <!--<td><%= link_to 'Editar', edit_admin_user_path(user) %></td>
+          <td><%= link_to 'Eliminar', admin_user_path(user), method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
+        </tr>
+      <% end %>
+    </table>
+  </section>
+
+</div>
