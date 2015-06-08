@@ -99,6 +99,7 @@ Rails.application.routes.draw do
       #Wall comments operations
       get ':id/wall/comments' => 'wall/comments#show'
       post ':id/wall/comments' => 'wall/comments#create_wall_comment'
+      post ':id/wall/notifications' => 'wall/comments#create_wall_notification'
     end
 
     namespace :jobs do

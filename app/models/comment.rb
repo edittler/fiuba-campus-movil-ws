@@ -10,6 +10,7 @@
 #  updated_at    :datetime         not null
 #  wall_id       :integer
 #  date          :string
+#  post_type     :string           default("comment")
 #
 # Indexes
 #
