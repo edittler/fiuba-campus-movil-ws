@@ -1,31 +1,51 @@
-<div class="row">
-  <div class="small-12 columns">
-    <h1><%= link_to 'Administrador', admin_root_path %><h1>
+<div class="row full-width full-height" id="welcome-row-content">
+  <div class="small-12 columns full-height" id="welcome-column-content">
+
+    <div class="row welcome-row">
+      <div class="small-12 columns">
+        <h1>FIUBA Campus Móvil</h1>
+      </div>
+    </div>
+
+    <div class="row welcome-row">
+
+      <div class="small-12 medium-8 columns">
+        <p>
+          Una nueva forma de conectarte con la facultad
+        </p>
+        <ul>
+          <li>Compartir tu perfil con tus compañeros de clase</li>
+          <li>Relacionarse con compañeros de clase</li>
+          <li>Escribir y localizar a tus contactos</li>
+          <li>Participar en grupos y crear grupos propios</li>
+          <li>Generar discusiones y subir archivos en grupos</li>
+        </ul>
+        <p><em>¡Próximamente el APK para descargar e instalar en tu Android!</em></p>
+      </div>
+
+      <div class="small-12 medium-4 columns">
+        <!-- Galería de fotos -->
+      </div>
+
+    </div>
+
+    <footer>
+      <div class="row" id="welcome-footer">
+
+        <div class="medium-4 columns">
+          Desarrollado por LGD IT<sup>&copy;</sup>
+        </div>
+
+        <div class="medium-4 columns">
+          Todos los derechos reservados
+        </div>
+
+        <div class="medium-4 columns">
+          <%= link_to 'Administrador', admin_root_path %>
+        </div>
+
+      </div>
+    </footer>
+
   </div>
 </div>
-
-<!--
-<% if user_signed_in? %>
-	<% content_for :title do %>Signed User<% end %>
-	<% content_for :head do %>
-		<meta name="authentication_token" content="<%= current_user.authentication_token %>"/>
-	<% end %>
-<% end %>
-
-<h1>
-	<% if user_signed_in?%>
-		Hello, <%= current_user.email %>
-	<% else %>
-		Hello, World!
-	<% end %>
-</h1>
-
-<h2>User Operations</h2>
-<p>
-	<% if user_signed_in? %>
-		<%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %>
-	<% else %>
-		<%= link_to 'Sign Up', new_user_registration_path %> | <%= link_to 'Login', new_user_session_path %>
-	<% end %>
-</p>
--->
