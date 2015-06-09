@@ -10,6 +10,7 @@ json.data do
     json.group_id    group.id
     json.name        group.name
     json.description group.description || ""
+    json.picture     group.picture_url
   end
 
 end
