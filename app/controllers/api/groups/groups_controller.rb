@@ -35,7 +35,7 @@ class Api::Groups::GroupsController < Api::ApiController
     end
 
     myUser = User.find_by_authentication_token(params[:user_token])
-    group = Group.find_by(id: 1)
+    group = Group.find_by(id: params[:id].to_i)
     if group.nil?
       render status: :error,
            json: { result: "error", message: "Group does not exist" }
