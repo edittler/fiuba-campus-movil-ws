@@ -131,6 +131,7 @@ Rails.application.routes.draw do
       get  'search'      => 'search_engine#basic_search'
       get  ':id/members' => 'members#index'
       post ':id/join'    => 'members#join'
+      post ':id/upload_profile_picture' => 'groups#upload_picture'
 
       # Discussions routes
       get  ':id/discussions' => 'discussions/discussions#index'
