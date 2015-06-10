@@ -23,8 +23,18 @@ class UserMailer < ApplicationMailer
     @sender_user = sender_user
     @receiver_user = receiver_user
     @sender_user_full_name = "#{sender_user.profile.first_name} #{sender_user.profile.last_name}"
-    subject = "Recibiste una solicitud de amistad de #{@sender_user_full_name}"
+    subject = "#{@sender_user_full_name} ha aceptado tu solicitud de amistad"
     mail(to: @receiver_user.email, subject: subject)
+  end
+
+  def new_discussion_in_group(group, discussion, user)
+    logger.debug "[USER MAILER] Discussion Params: #{discussion.attributes.inspect}"
+    @group = group
+    @discussion = discussion
+    @user = user
+    @user_full_name = "#{user.profile.first_name} #{user.profile.last_name}"
+    subject = "Se ha publicado una nueva discusion en el grupo #{group.name}"
+    mail(to: user.email, subject: subject)
   end
 
 end

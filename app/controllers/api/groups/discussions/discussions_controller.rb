@@ -2,39 +2,38 @@ class Api::Groups::Discussions::DiscussionsController < Api::ApiController
 
   # GET /api/groups/:id/discussions
   def index
-  	group = Group.find_by(id: params[:id].to_i)
-  	if group.nil?
-  		render status: :error,
-           json: { result: "error", message: "Group does not exist" }
-        return
-    end	
-  	if group.forum.nil?
-  		render status: :ok,
+    group = Group.find_by(id: params[:id].to_i)
+    if group.nil?
+      render status: :error,
+             json: { result: "error", message: "Group does not exist" }
+      return
+    end
+    if group.forum.nil?
+      render status: :ok,
              json: {result: "ok", message: "No discussions to show", data: { groupDiscussions: [] } }
       return
     end
     
-  	@discussions = group.forum.discussions
+    @discussions = group.forum.discussions
     render status: :ok
   end
 
   # GET /api/groups/:id/discussions/:discussion_id
   def show
-  	discussion = Discussion.find_by(id: params[:discussion_id].to_i)    	
-  	if discussion.nil?
-  		render status: :error,
-           json: { result: "error", message: "Discussion does not exist" }
+    discussion = Discussion.find_by(id: params[:discussion_id].to_i)
+    if discussion.nil?
+      render status: :error,
+             json: { result: "error", message: "Discussion does not exist" }
         return
-    end	
+    end
 
-    @myUser = User.find_by_authentication_token(params[:user_token])    
+    @myUser = User.find_by_authentication_token(params[:user_token])
     @comments = discussion.comments
     render status: :ok
   end
 
   # POST /api/groups/:id/discussions
-  def create   
-
+  def create
     unless exists_create_discussion_required_params?
       render_missing_required_params
       return
@@ -43,34 +42,44 @@ class Api::Groups::Discussions::DiscussionsController < Api::ApiController
     myUser = User.find_by_authentication_token(params[:user_token])
     group = Group.find_by(id: params[:id].to_i)
     if group.nil?
-  		render status: :error,
-           json: { result: "error", message: "Group does not exist" }
+      render status: :error,
+             json: { result: "error", message: "Group does not exist" }
         return
     end
 
-  	if !myUser.in_group?(group)
+    if !myUser.in_group?(group)
       render status: :conflict,
              json: {result: "error", message: "User is not in the group"}
       return
     end
 
     if group.forum.nil?
-  		group.forum = Forum.create(title: "", description: "")
+      group.forum = Forum.create(title: "", description: "")
     end
-  	discussion = Discussion.create(subject: params[:subject])
-  	discussion.user = myUser
-  	group.forum.discussions << discussion
+    discussion = Discussion.create(subject: params[:subject])
+    discussion.user = myUser
+    group.forum.discussions << discussion
+
+    notify_new_discussion(group, discussion)
 
     render status: :created,
            json: { result: "ok", message: "Create discussion success" }
-  end  
+  end
 
   private
 
     def exists_create_discussion_required_params?
       if params[:subject].nil?
-      	return false
+        return false
       end
       return true
-    end    
+    end
+
+    def notify_new_discussion(group, discussion)
+      members = User.in_group(group)
+      members.each { |member|
+        UserMailer.new_discussion_in_group(group, discussion, member).deliver_now
+      }
+    end
+
 end
