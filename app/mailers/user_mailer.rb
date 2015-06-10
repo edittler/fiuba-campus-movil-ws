@@ -32,8 +32,18 @@ class UserMailer < ApplicationMailer
     @group = group
     @discussion = discussion
     @user = user
-    @user_full_name = "#{user.profile.first_name} #{user.profile.last_name}"
+    @discussion_author_full_name = "#{discussion.user.profile.first_name} #{discussion.user.profile.last_name}"
     subject = "Se ha publicado una nueva discusion en el grupo #{group.name}"
+    mail(to: user.email, subject: subject)
+  end
+
+  def new_file_in_group(group, uploaded_datum, user)
+    logger.debug "[USER MAILER] File Params: #{uploaded_datum.attributes.inspect}"
+    @group = group
+    @file = uploaded_datum
+    @user = user
+    @uploader_full_name = "#{@file.user.profile.first_name} #{@file.user.profile.last_name}"
+    subject = "Se ha subido un nuevo archivo en el grupo #{group.name}"
     mail(to: user.email, subject: subject)
   end
 

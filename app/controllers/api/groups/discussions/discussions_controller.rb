@@ -78,6 +78,7 @@ class Api::Groups::Discussions::DiscussionsController < Api::ApiController
     def notify_new_discussion(group, discussion)
       members = User.in_group(group)
       members.each { |member|
+        next if discussion.user.id == member.id
         UserMailer.new_discussion_in_group(group, discussion, member).deliver_now
       }
     end

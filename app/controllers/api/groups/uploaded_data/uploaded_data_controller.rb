@@ -8,13 +8,14 @@ class Api::Groups::UploadedData::UploadedDataController < Api::ApiController
            json: { result: "error", message: "Group does not exist" }
         return
     end
+
     if group.uploaded_data.nil?
-        render status: :ok,
+      render status: :ok,
              json: {result: "ok", message: "No uploaded data to show", data: { uploaded_data: [] } }
       return
     end
-    
-  	@uploaded_data = group.uploaded_data
+
+    @uploaded_data = group.uploaded_data
     render status: :ok
   end
 
@@ -31,8 +32,7 @@ class Api::Groups::UploadedData::UploadedDataController < Api::ApiController
  # end
 
   # POST /api/groups/:id/uploaded_datum
-  def create   
-
+  def create
     unless exists_create_file_required_params?
       render_missing_required_params
       return
@@ -41,18 +41,18 @@ class Api::Groups::UploadedData::UploadedDataController < Api::ApiController
     myUser = User.find_by_authentication_token(params[:user_token])
     group = Group.find_by(id: params[:id].to_i)
     if group.nil?
-  		render status: :error,
-           json: { result: "error", message: "Group does not exist" }
-        return
+      render status: :error,
+             json: { result: "error", message: "Group does not exist" }
+      return
     end
 
     if myUser.nil?
       render status: :error,
-           json: { result: "error", message: "User does not exist" }
-        return
+             json: { result: "error", message: "User does not exist" }
+      return
     end
 
-  	if !myUser.in_group?(group)
+    if !myUser.in_group?(group)
       render status: :conflict,
              json: {result: "error", message: "User is not in the group"}
       return
@@ -63,6 +63,8 @@ class Api::Groups::UploadedData::UploadedDataController < Api::ApiController
     input_values_into_uploaded_datum(uploaded_datum,uploaded_datum_params)
     uploaded_datum.user = myUser
     uploaded_datum.save()
+
+    notify_new_uploaded_data(group, uploaded_datum)
 
     render status: :created,
            json: { result: "ok", message: "Uploaded datum success" }
@@ -82,4 +84,13 @@ class Api::Groups::UploadedData::UploadedDataController < Api::ApiController
       uploaded_datum.url = uploaded_datum_params[:url]
       #uploaded_datum.file_type = uploaded_datum_params[:type]
     end
+
+    def notify_new_uploaded_data(group, uploaded_datum)
+      members = User.in_group(group)
+      members.each { |member|
+        next if uploaded_datum.user.id == member.id
+        UserMailer.new_file_in_group(group, uploaded_datum, member).deliver_now
+      }
+    end
+
 end
