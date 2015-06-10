@@ -23,18 +23,17 @@ class Api::Friends::FriendshipRequestsController < Api::ApiController
 
     user_to_invite_id = params[:user_to_invite_id]
 
-    # TODO: Chequear si se quiere invitar a si mismo!
-
     unless User.exists?(user_to_invite_id)
       render status: :not_found,
              json: { result: "error", message: "User to invite no exists" }
       return
     end
 
-    # TODO: Chequear si ya son amigos!!!
-
     user_to_invite = User.find(user_to_invite_id)
     logger.debug "[API] User to invite: #{user_to_invite.attributes.inspect}"
+
+    # TODO: Chequear si se quiere invitar a si mismo!
+    # TODO: Chequear si ya son amigos!!!
 
     request_params = { sender_user_id:   user.id,
                        receiver_user_id: user_to_invite_id }
@@ -46,6 +45,8 @@ class Api::Friends::FriendshipRequestsController < Api::ApiController
     end
 
     FriendshipRequest.create(request_params)
+
+    UserMailer.arrive_friendship_request(user, user_to_invite).deliver_now
 
     render status: :ok,
            json: { result: "ok", message: "Frienship request sent" }
@@ -97,6 +98,8 @@ class Api::Friends::FriendshipRequestsController < Api::ApiController
       # Add friendships
       # TODO: chequear si ya son amigos
       user.friends << sender_user
+
+      UserMailer.acept_friendship_request(user, sender_user).deliver_now
 
       render status: :ok,
              json: { result: "ok", message: "Friendship request has been accepted" }
