@@ -30,7 +30,7 @@ class Api::Users::SessionsController < Api::ApiController
       return
     end
 
-    unless @user.banned
+    if @user.banned
       render status: :ok,
              json: { result: "bannedUser", message: "The user has been banned by an administrator." }
       return
