@@ -77,9 +77,8 @@ Rails.application.routes.draw do
     #get 'sign_in'     => 'sessions#new'
     #post 'sign_in'    => 'sessions#create'
     #delete 'sign_out' => 'sessions#destroy'
+    get '/chart_carreras' => 'reportes#chart_carreras'
   end
-
-  get '/charts' => 'reportes#charts'
 
   namespace :api, :defaults => { :format => 'json' } do
 
