@@ -48,4 +48,12 @@ class Admin::ReportesController < ApplicationController
 
     render "chart_carreras"
   end
+
+  def chart_foros
+
+  end
+
+  def chart_alumnos
+
+  end
 end
