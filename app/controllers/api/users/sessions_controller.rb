@@ -30,6 +30,12 @@ class Api::Users::SessionsController < Api::ApiController
       return
     end
 
+    unless @user.banned
+      render status: :ok,
+             json: { result: "bannedUser", message: "The user has been banned by an administrator." }
+      return
+    end
+
     @user.restore_authentication_token!
     # Render JSON in JBuilder.
     # See /app/views/api/users/sessions/create.json.jbuilder
