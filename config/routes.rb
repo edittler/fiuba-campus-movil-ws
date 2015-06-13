@@ -79,6 +79,8 @@ Rails.application.routes.draw do
     #delete 'sign_out' => 'sessions#destroy'
   end
 
+  get '/charts' => 'reportes#charts'
+
   namespace :api, :defaults => { :format => 'json' } do
 
     namespace :users do

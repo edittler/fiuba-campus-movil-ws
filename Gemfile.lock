@@ -78,6 +78,7 @@ GEM
     globalid (0.3.5)
       activesupport (>= 4.1.0)
     groupify (0.6.2)
+    hash-deep-merge (0.1.1)
     i18n (0.7.0)
     jbuilder (2.2.16)
       activesupport (>= 3.0.0, < 5)
@@ -90,6 +91,9 @@ GEM
       railties (>= 3.1.0)
       turbolinks
     json (1.8.3)
+    lazy_high_charts (1.5.4)
+      bundler (>= 1.0)
+      hash-deep-merge
     loofah (2.0.2)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -218,6 +222,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks
+  lazy_high_charts
   paperclip (~> 4.2)
   paperclip-dropbox (>= 1.1.7)
   pg

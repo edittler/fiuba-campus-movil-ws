@@ -55,6 +55,8 @@ gem "paperclip-dropbox", ">= 1.1.7"
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+  gem 'lazy_high_charts'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
@@ -73,6 +75,7 @@ group :development, :test do
 
   # Easily generate a diagram based on your application's Active Record models
   gem 'rails-erd'
+  
 end
 
 group :production do
