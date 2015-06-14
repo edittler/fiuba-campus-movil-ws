@@ -9,22 +9,29 @@
 	</table>
 </form> 
 
-<!-- Colocamos el gráfico -->
-<%= high_chart("my_id", @chart_foros) %>
-
-<!-- Colocamos la tabla -->
 <table>
-<tr>
-	<td>Grupo</td><td>Cantidad de<br>integrantes</td><td>Foro</td><td>Comentarios</td>
-</tr>
+	<tr>		
+		<td>
+			<!-- Colocamos la tabla -->
+			<table>
+				<tr>
+					<td><b>Grupo</b></td><td><b>Cantidad de integrantes</b></td><td><b>Foro</b></td><td><b>Comentarios</b></td>
+				</tr>
 
-<% @discussions.each do |discussion| %>
-    <tr>
-	    <td><%= discussion.forum.group.name %></td>
-	    <td><%= discussion.forum.group.members.size %></td>
-	    <td><%= discussion.subject %></td>
-	    <td><%= discussion.comments.size %></td>
-    </tr>
-<% end %>
+				<% @discussions.each do |discussion| %>
+				    <tr>
+					    <td><%= discussion.forum.group.name %></td>
+					    <td><%= discussion.forum.group.members.size %></td>
+					    <td><%= discussion.subject %></td>
+					    <td><%= @discussionsActivity[discussion] %></td>
+				    </tr>
+				<% end %>
+			</table>
+		</td>
 
+		<td width="75%">
+			<!-- Colocamos el gráfico -->
+			<%= high_chart("my_id", @chart_foros) %>
+		</td>
+	</tr>
 </table>

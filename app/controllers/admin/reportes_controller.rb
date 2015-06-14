@@ -98,7 +98,7 @@ class Admin::ReportesController < ApplicationController
       discussion = comment.discussion
       @discussionsActivity[discussion] += 1
     end
-    @discussionsActivity = @discussionsActivity.to_a
+    @discussionsActivityArray = @discussionsActivity.to_a
 
     # Me guardo en un array los nombres de cada discusion
     @discussionNames = Array.new
@@ -113,15 +113,15 @@ class Admin::ReportesController < ApplicationController
             })
           series = {
             :type => 'column',
-            :name => 'discusiones',
-            :data => @discussionsActivity
+            :name => 'Comentarios por discusión',
+            :data => @discussionsActivityArray
           }
           xAxis = {
             :categories => @discussionNames
           }
           f.xAxis(xAxis)
           f.series(series)
-          f.options[:title][:text] = "Discusiones con mayor actividad"
+          f.options[:title][:text] = "Foros con mayor cantidad de respuestas en el período elegido"
           f.legend(:layout=> 'vertical', :style => {
             :left => 'auto',
             :bottom => 'auto',
