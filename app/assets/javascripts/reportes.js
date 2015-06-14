@@ -12,31 +12,26 @@
 
 $(function(){
 
-// create canvas function from highcharts example http://jsfiddle.net/highcharts/PDnmQ/
-(function (H) {
-    H.Chart.prototype.createCanvas = function (divId) {
-        var svg = this.getSVG(),
-            width = parseInt(svg.match(/width="([0-9]+)"/)[1]),
-            height = parseInt(svg.match(/height="([0-9]+)"/)[1]),
-            canvas = document.createElement('canvas');
+	// create canvas function from highcharts example http://jsfiddle.net/highcharts/PDnmQ/
+	(function (H) {
+		H.Chart.prototype.createCanvas = function (divId) {
+			var svg = this.getSVG(),
+			width = parseInt(svg.match(/width="([0-9]+)"/)[1]),
+			height = parseInt(svg.match(/height="([0-9]+)"/)[1]),
+			canvas = document.createElement('canvas');
 
-        canvas.setAttribute('width', width);
-        canvas.setAttribute('height', height);
+			canvas.setAttribute('width', width);
+			canvas.setAttribute('height', height);
 
-        if (canvas.getContext && canvas.getContext('2d')) {
-
-            canvg(canvas, svg);
-
-            return canvas.toDataURL("image/jpeg");
-
-        } 
-        else {
-            alert("Your browser doesn't support this feature, please use a modern browser");
-            return false;
-        }
-
-    }
-}(Highcharts));
+			if (canvas.getContext && canvas.getContext('2d')) {
+				canvg(canvas, svg);
+				return canvas.toDataURL("image/jpeg");
+			} else {
+				alert("Your browser doesn't support this feature, please use a modern browser");
+				return false;
+			}
+		}
+	}(Highcharts));
 
 	$("#export-carreras-to-pdf").on("click", exportCarrerasToPDF);
 
@@ -66,7 +61,7 @@ $(function(){
 		// in a different position
 		var chartWidth = 120;
 		var chartHeight = 80;
-		var chartScale = 2;
+		var chartScale = 1.8;
 
 		$('#chart-carreras').each(function (index) {
 			var imageData = $(this).highcharts().createCanvas();
@@ -80,10 +75,14 @@ $(function(){
 				imageData,
 				'JPEG',
 				0,
-				(index * chartHeight * chartScale) + 40,
+				(index * chartHeight * chartScale),
 				chartWidth * chartScale,
 				chartHeight * chartScale
 			);
+		});
+
+		doc.fromHTML($("#table-carreras").get(0), 20, 150, {
+			'width': 150
 		});
 
 		doc.output("dataurlnewwindow");
