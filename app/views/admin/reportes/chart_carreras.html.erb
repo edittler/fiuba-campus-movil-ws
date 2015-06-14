@@ -1,14 +1,15 @@
-<%= high_chart("my_id", @chart_carreras) %>
-
-<!--<ul>
-
-
-<li><%=  @approved_users.inspect %></li>
-
-<li><%=  @carreers_name.inspect %></li>
-
-<li><%=  @total_numer_of_approved_users.inspect %></li>
-
-<li><%=  @carreers.inspect %></li>
-
-</ul>-->
+<div class="row">
+	<div class="small-8 columns">
+	</div>
+	<div class="small-4 columns">
+		<h6>
+			<b>Exportar: </b>
+			<a class="button-export" id="export-carreras-to-pdf" href="#">PDF</a>
+		</h6>
+	</div>
+</div>
+<div class="row" id="stats-carreras">
+	<div class="small-12 columns">
+		<%= high_chart("chart-carreras", @chart_carreras) %>
+	</div>
+</div>

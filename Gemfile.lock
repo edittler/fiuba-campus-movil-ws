@@ -91,6 +91,9 @@ GEM
       railties (>= 3.1.0)
       turbolinks
     json (1.8.3)
+    jspdf-rails (1.0.3)
+      jquery-rails
+      rails (>= 3.1.0)
     lazy_high_charts (1.5.4)
       bundler (>= 1.0)
       hash-deep-merge
@@ -164,7 +167,7 @@ GEM
     rspec-mocks (3.3.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
-    rspec-rails (3.3.0)
+    rspec-rails (3.3.1)
       actionpack (>= 3.0, < 4.3)
       activesupport (>= 3.0, < 4.3)
       railties (>= 3.0, < 4.3)
@@ -222,6 +225,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks
+  jspdf-rails
   lazy_high_charts
   paperclip (~> 4.2)
   paperclip-dropbox (>= 1.1.7)
