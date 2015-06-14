@@ -66,7 +66,51 @@ class Admin::ReportesController < ApplicationController
   end
 
   def chart_foros
+    @discussions = Discussion.all
+    @comments = Comment.all
 
+    # Inicializo a todas las carreras en 0
+    @discussionsActivity = Hash[@discussions.map {|v| [v, 0]}]
+
+    # Itero por todos los comentarios y voy contando las discusiones
+    @comments.each do |comment|
+      discussion = comment.discussion
+      @discussionsActivity[discussion] += 1/Float( @discussions.size)
+    end
+    
+    @discussionsActivity = @discussionsActivity.to_a
+    @chart_foros = LazyHighCharts::HighChart.new('pie') do |f|
+          f.chart({
+            :defaultSeriesType =>"pie",
+            :margin => [50, 200, 60, 170]
+            })
+          series = {
+            :type => 'pie',
+            :name => 'discusiones',
+            :data => @discussionsActivity
+          }
+          f.series(series)
+          f.options[:title][:text] = "Discusiones con mayor actividad"
+          f.legend(:layout=> 'vertical', :style => {
+            :left => 'auto',
+            :bottom => 'auto',
+            :right => '50px',
+            :top=> '100px'
+            })
+          f.plot_options(:pie => {
+            :allowPointSelect => true,
+            :cursor => "pointer",
+            :dataLabels => {
+              :enabled=>true,
+              :color=>"black",
+              :style => {
+                :font => "13px Trebuchet MS, Verdana, sans-serif"
+              }
+            }
+          })
+    end
+
+    render "chart_foros"
   end
 
   def chart_alumnos
