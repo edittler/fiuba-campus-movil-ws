@@ -66,19 +66,25 @@ class Admin::ReportesController < ApplicationController
   end
 
   def chart_foros
-    @discussions = Discussion.all.map(&:subject)
+    @discussions = Discussion.all    
     @comments = Comment.all
 
-    # Inicializo a todas las carreras en 0
+    # Inicializo a todas las discusiones en 0
     @discussionsActivity = Hash[@discussions.map {|v| [v, 0]}]
 
     # Itero por todos los comentarios y voy contando las discusiones
     @comments.each do |comment|
       discussion = comment.discussion
-      @discussionsActivity[discussion.subject] += 1/Float( @discussions.size)
+      @discussionsActivity[discussion] += 1
     end
-    
     @discussionsActivity = @discussionsActivity.to_a
+
+    # Me guardo en un array los nombres de cada discusion
+    @discussionNames = Array.new
+    @discussions.each do |discussion|
+      @discussionNames.push (discussion.subject + "-" + discussion.forum.group.name)
+    end    
+    
     @chart_foros = LazyHighCharts::HighChart.new('column') do |f|
           f.chart({
             :defaultSeriesType =>"column",
@@ -90,9 +96,9 @@ class Admin::ReportesController < ApplicationController
             :data => @discussionsActivity
           }
           xAxis = {
-            :categories => @discussions
+            :categories => @discussionNames
           }
-          f.xAxis(xAxis);
+          f.xAxis(xAxis)
           f.series(series)
           f.options[:title][:text] = "Discusiones con mayor actividad"
           f.legend(:layout=> 'vertical', :style => {

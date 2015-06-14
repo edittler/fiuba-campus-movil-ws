@@ -1,1 +1,18 @@
 <%= high_chart("my_id", @chart_foros) %>
+
+<table>
+<tr>
+	<td>Grupo</td><td>Cantidad de integrantes</td><td>Foro</td><td>Comentarios</td>
+</tr>
+
+
+<% @discussions.each do |discussion| %>
+    <tr>
+	    <td><%= discussion.forum.group.name %></td>
+	    <td>Cantidad de integrantes</td>
+	    <td><%= discussion.subject %></td>
+	    <td text-align="center"><%= discussion.comments.size %></td>
+    </tr>
+<% end %>
+
+</table>
