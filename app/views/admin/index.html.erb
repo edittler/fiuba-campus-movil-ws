@@ -2,10 +2,10 @@
 <h3>¿Que desea hacer?</h3>
 <ul>
   <li><%= link_to 'Ver los usuarios', admin_users_path %></li>
-
-  <li><%= link_to 'Ver reporte de Carreras',admin_chart_carreras_path %></li>
-
-  <li><%= link_to 'Ver reporte de altas y bajas Alumnos',admin_chart_alumnos_path %></li>
-
-  <li><%= link_to 'Ver reporte de Foros',admin_chart_foros_path %></li>
+  <li>Ver reportes</li>
+  <ul>
+    <li><%= link_to 'Carreras', admin_chart_carreras_path %></li>
+    <li><%= link_to 'Altas y bajas de alumnos', admin_chart_alumnos_path %></li>
+    <li><%= link_to 'Discusiones más populares', admin_chart_foros_path %></li>
+  </ul>
 </ul>

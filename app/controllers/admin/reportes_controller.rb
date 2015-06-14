@@ -5,42 +5,58 @@ class Admin::ReportesController < ApplicationController
   before_filter :authenticate_admin!
   
   def chart_carreras
-
     @approved_users = User.all
 
-    #consigo todas las carreras ( select distinct )
-    @carreers_name = AcademicInfo.uniq.pluck(:carreer)
+    # Consigo todas las carreras ( select distinct )
+    @careers_name = AcademicInfo.uniq.pluck(:carreer)
+
+    # Reemplazo el nombre nil por Desconocido
+    unknown_career = "Desconocido"
+    if @careers_name.include?(nil)
+      nil_index = @careers_name.index(nil)
+      @careers_name[nil_index] = unknown_career
+    end
+    logger.debug "[REPORTS] Careers name: #{@carreers_name}"
 
     @total_numer_of_approved_users = @approved_users.size
 
-    #inicializo a todas las carreras en 0
-    @carreers = Hash[@carreers_name.map {|v| [v, 0]}]
+    # Inicializo a todas las carreras en 0
+    @careers = Hash[@careers_name.map {|v| [v, 0]}]
 
     #itero por todos los usuarios registrados y voy contando las carreras
     @approved_users.each do |user|
-      @carreers[user.academic_info.carreer] += 1/Float( @carreers_name.size)
+      career_name = user.academic_info.carreer || unknown_career
+      @careers[career_name] += 1/Float( @careers_name.size)
     end
 
-    @carreers = @carreers.to_a
+    @careers = @careers.to_a
 
     @chart_carreras = LazyHighCharts::HighChart.new('pie') do |f|
-          f.chart({:defaultSeriesType=>"pie" , :margin=> [50, 200, 60, 170]} )
+          f.chart({
+            :defaultSeriesType =>"pie",
+            :margin => [50, 200, 60, 170]
+            })
           series = {
-                   :type=> 'pie',
-                   :name=> 'carreras',
-                   :data=> @carreers
+            :type => 'pie',
+            :name => 'carreras',
+            :data => @careers
           }
           f.series(series)
-          f.options[:title][:text] = "Carreras de Alumnos registrados en los ultimos 12 meses"
-          f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'}) 
-          f.plot_options(:pie=>{
-            :allowPointSelect=>true, 
-            :cursor=>"pointer" , 
-            :dataLabels=>{
+          f.options[:title][:text] = "Carreras de alumnos registrados"
+          f.legend(:layout=> 'vertical', :style => {
+            :left => 'auto',
+            :bottom => 'auto',
+            :right => '50px',
+            :top=> '100px'
+            })
+          f.plot_options(:pie => {
+            :allowPointSelect => true,
+            :cursor => "pointer",
+            :dataLabels => {
               :enabled=>true,
               :color=>"black",
-              :style=>{
-                :font=>"13px Trebuchet MS, Verdana, sans-serif"
+              :style => {
+                :font => "13px Trebuchet MS, Verdana, sans-serif"
               }
             }
           })
@@ -56,4 +72,5 @@ class Admin::ReportesController < ApplicationController
   def chart_alumnos
 
   end
+
 end

@@ -14,10 +14,10 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require foundation
+//= require highcharts/highstock
+//= require highcharts/highcharts
+//= require highcharts/highcharts-more
 //= require_tree .
 //= require turbolinks
-//= require highcharts/highcharts                                                           
-//= require highcharts/highcharts-more                                                         
-//= require highcharts/highstock
 
 $(function(){ $(document).foundation(); });

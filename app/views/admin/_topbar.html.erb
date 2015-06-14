@@ -28,6 +28,14 @@
       <ul class="left">
         <% if admin_signed_in?%>
           <li><%= link_to 'Usuarios', admin_users_path %></li>
+          <li class="has-dropdown">
+            <a href="#">Reportes</a>
+            <ul class="dropdown">
+              <li><%= link_to 'Carreras', admin_chart_carreras_path %></li>
+              <li><%= link_to 'Alumnos', admin_chart_alumnos_path %></li>
+              <li><%= link_to 'Discusiones', admin_chart_foros_path %></li>
+            </ul>
+          </li>
         <% end %>
       </ul>
     </section>
