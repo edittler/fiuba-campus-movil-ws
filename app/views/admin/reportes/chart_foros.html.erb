@@ -2,16 +2,16 @@
 
 <table>
 <tr>
-	<td>Grupo</td><td>Cantidad de integrantes</td><td>Foro</td><td>Comentarios</td>
+	<td>Grupo</td><td>Cantidad de<br>integrantes</td><td>Foro</td><td>Comentarios</td>
 </tr>
 
 
 <% @discussions.each do |discussion| %>
     <tr>
 	    <td><%= discussion.forum.group.name %></td>
-	    <td>Cantidad de integrantes</td>
+	    <td><%= discussion.forum.group.members.size %></td>
 	    <td><%= discussion.subject %></td>
-	    <td text-align="center"><%= discussion.comments.size %></td>
+	    <td><%= discussion.comments.size %></td>
     </tr>
 <% end %>
 
