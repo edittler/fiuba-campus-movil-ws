@@ -157,6 +157,70 @@ class Admin::ReportesController < ApplicationController
 
   def chart_alumnos
 
+    @all_users = User.all
+
+    user_status_count = Hash.new(0)
+    @all_users.each do |user| 
+      (user.banned ? user_status_count["banned"] += 1 : user_status_count["active"] += 1)
+    end
+
+    logger.debug "[REPORTS] Users count: #{user_status_count.inspect}"
+
+    @active_users = [0, 0, 1, 1, 3, 5, 4, 6, 7, 10, 10, user_status_count["active"]]
+    @banned_users = [0, 0, 0, 0, 0, 0, 2, 2, 1, 2, 3, user_status_count["banned"]]
+
+    @chart_alumnos = LazyHighCharts::HighChart.new('lines') do |f|
+      f.series( :name=>'Usuarios Activos',
+                :data=>[@active_users[0], @active_users[1], @active_users[2], 
+                  @active_users[3], @active_users[4], @active_users[5], @active_users[6], @active_users[7], 
+                  @active_users[8], @active_users[9], @active_users[10], @active_users[11]], 
+                :color=>"green",
+                :dataLabels => {
+                  :enabled => true,
+                  :rotation => '0',
+                  :color => "green",
+                  :align => 'center',
+                  :y => -5,
+                  :x => +5,
+                  :style => {
+                      :font => "12px Trebuchet MS, Verdana, sans-serif"
+                  }
+                })     
+      f.series( :name=>'Usuarios Suspendidos',
+                :data=>[@banned_users[0], @banned_users[1], @banned_users[2], 
+                  @banned_users[3], @banned_users[4], @banned_users[5], @banned_users[6], @banned_users[7], 
+                  @banned_users[8], @banned_users[9], @banned_users[10], @banned_users[11]], 
+                :color=>"red",
+                :dataLabels => {
+                  :enabled => true,
+                  :rotation => '0',
+                  :color => "red",
+                  :align => 'center',
+                  :y => -5,
+                  :x => -5,
+                  :style => {
+                      :font => "12px Trebuchet MS, Verdana, sans-serif"
+                  }
+                })
+      f.title({ :text=>"Evolución de usuarios activos y suspendidos de los últimos 12 meses"})
+
+      f.options[:chart][:defaultSeriesType] = "line"
+      f.options[:xAxis] = {:plot_bands => "none", :categories => ["Jul 14", "Ago 14", "Sep 14", "Oct 14", "Nov 14", "Dic 14", "Ene 15", "Feb 15", "Mar 15", "Abr 15", "May 15", "Actual"]}
+      f.options[:yAxis][:title] = {:text=>"Cantidad de Usuarios"}
+      f.options[:yAxis][:min] = 0;
+      f.plot_options(:line => {
+        :dataLabels => {
+          :enabled => true,
+          :color => "gray",
+          :style => {
+            :font => "13px Trebuchet MS, Verdana, sans-serif"
+          }
+        }
+      })
+
+    end
+
+    render "chart_alumnos"
   end
 
   private
