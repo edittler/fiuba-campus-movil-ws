@@ -170,6 +170,25 @@ class Admin::ReportesController < ApplicationController
     @banned_users = [0, 0, 0, 0, 0, 0, 2, 2, 1, 2, 3, user_status_count["banned"]]
 
     @chart_alumnos = LazyHighCharts::HighChart.new('lines') do |f|
+    f.series( :name=>'Total de Usuarios',
+              :data=>[@active_users[0] + @banned_users[0], @active_users[1] + @banned_users[1], 
+                @active_users[2] + @banned_users[2], @active_users[3] + @banned_users[3], 
+                @active_users[4] + @banned_users[4], @active_users[5] + @banned_users[5], 
+                @active_users[6] + @banned_users[6], @active_users[7] + @banned_users[7], 
+                @active_users[8] + @banned_users[8], @active_users[9] + @banned_users[9], 
+                @active_users[10] + @banned_users[10], @active_users[11] + @banned_users[11]], 
+              :color=>"black",
+              :dataLabels => {
+                :enabled => true,
+                :rotation => '0',
+                :color => "black",
+                :align => 'center',
+                :y => -20,
+                :x => 0,
+                :style => {
+                    :font => "12px Trebuchet MS, Verdana, sans-serif"
+                }
+              }) 
       f.series( :name=>'Usuarios Activos',
                 :data=>[@active_users[0], @active_users[1], @active_users[2], 
                   @active_users[3], @active_users[4], @active_users[5], @active_users[6], @active_users[7], 
