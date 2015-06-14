@@ -2,6 +2,13 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+@import "foundation_and_overrides";
+
+.button-action {
+  @include button(rem-calc(5));
+  margin-bottom: 0;
+}
+
 .sub-nav {
 
   dd {

@@ -17,11 +17,13 @@
 #  updated_at             :datetime
 #  authentication_token   :string
 #  approved               :boolean          default(FALSE), not null
+#  banned                 :boolean          default(FALSE), not null
 #
 # Indexes
 #
 #  index_users_on_approved              (approved)
 #  index_users_on_authentication_token  (authentication_token) UNIQUE
+#  index_users_on_banned                (banned)
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
@@ -63,12 +65,14 @@ class User < ActiveRecord::Base
   end
 
   def active_for_authentication?
-    super && approved?
+    super and approved? and not banned?
   end
 
    def inactive_message
-    if !approved?
+    if not approved?
       :not_approved
+    elsif banned?
+      :banned
     else
       super # Use whatever other message
     end

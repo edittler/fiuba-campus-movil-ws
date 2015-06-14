@@ -5,11 +5,11 @@ class Admin::UsersController < ApplicationController
   before_filter :authenticate_admin!
 
   def index
-    if params[:approved] == "false"
-      @users = User.find_all_by_approved(false)
-    else
-      @users = User.all
-    end
+    @unapproved_users = User.where(approved: false)
+    logger.debug "[API] Unapproved users: #{@unapproved_users}"
+    @banned_users = User.where(banned: true)
+    @active_users = User.where(approved: true, banned: false)
+    @all_users = User.all
   end
 
   def show
@@ -30,12 +30,28 @@ class Admin::UsersController < ApplicationController
   end
 
   def approve
-    logger.debug "[ADMIN] Params: #{params}"
+    #logger.debug "[ADMIN] Params: #{params}"
     @user = User.find(params[:id])
     logger.debug "[ADMIN] User to approve: #{@user.attributes.inspect}"
     @user.approved = true
     @user.save
     UserMailer.welcome(@user).deliver_now
+    redirect_to admin_users_path
+  end
+
+  def ban
+    @user = User.find(params[:id])
+    logger.debug "[ADMIN] User to ban: #{@user.attributes.inspect}"
+    @user.banned = true
+    @user.save
+    redirect_to admin_users_path
+  end
+
+  def unban
+    @user = User.find(params[:id])
+    logger.debug "[ADMIN] User to unban: #{@user.attributes.inspect}"
+    @user.banned = false
+    @user.save
     redirect_to admin_users_path
   end
 

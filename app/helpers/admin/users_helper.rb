@@ -8,12 +8,16 @@ module Admin::UsersHelper
     "#{user.academic_info.padron}"
   end
 
-  def user_career(user)
-    "#{user.academic_info.carreer}"
-  end
-
   def approve_user_status(user)
     if user.approved
+      "Si"
+    else
+      "No"
+    end
+  end
+
+  def banned_user_status(user)
+    if user.banned
       "Si"
     else
       "No"
@@ -25,6 +29,22 @@ module Admin::UsersHelper
       "Reenviar mail"
     else
       "Aprobar"
+    end
+  end
+
+  def ban_user(user)
+    if user.banned
+      "Activar"
+    else
+      "Suspender"
+    end
+  end
+
+  def ban_unban_user_path(user)
+    if user.banned
+      admin_user_unban_path(user)
+    else
+      admin_user_ban_path(user)
     end
   end
 

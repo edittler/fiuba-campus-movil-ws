@@ -74,6 +74,8 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :users
     post 'users/:id/approve' => 'users#approve', :as => :user_approve
+    post 'users/:id/ban'     => 'users#ban',     :as => :user_ban
+    post 'users/:id/unban'   => 'users#unban',   :as => :user_unban
     #get 'sign_in'     => 'sessions#new'
     #post 'sign_in'    => 'sessions#create'
     #delete 'sign_out' => 'sessions#destroy'

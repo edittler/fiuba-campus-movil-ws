@@ -19,16 +19,19 @@ class Api::Users::SearchEngineController < Api::ApiController
     if params[:query].nil?
       results_by_name = User.includes(:profile).all
     else
-      name_conditions = "LOWER(profiles.first_name) LIKE ? OR LOWER(profiles.last_name) LIKE ?"
-      city_conditions = "LOWER(profiles.first_name) NOT LIKE ? AND LOWER(profiles.last_name) NOT LIKE ? AND LOWER(cities.name) LIKE ?"
-      nationality_conditions = "LOWER(profiles.first_name) NOT LIKE ? AND LOWER(profiles.last_name) NOT LIKE ? AND LOWER(nationalities.nationality) LIKE ?"
-      career_conditions = "LOWER(profiles.first_name) NOT LIKE ? AND LOWER(profiles.last_name) NOT LIKE ? AND LOWER(nationalities.nationality) NOT LIKE ? AND LOWER(academic_infos.carreer) LIKE ?"
+      boolean_conditions = "approved = ? AND banned = ?"
+      name_conditions = "#{boolean_conditions} AND (LOWER(profiles.first_name) LIKE ? OR LOWER(profiles.last_name) LIKE ?)"
+      city_conditions = "#{boolean_conditions} AND (LOWER(profiles.first_name) NOT LIKE ? AND LOWER(profiles.last_name) NOT LIKE ? AND LOWER(cities.name) LIKE ?)"
+      nationality_conditions = "#{boolean_conditions} AND (LOWER(profiles.first_name) NOT LIKE ? AND LOWER(profiles.last_name) NOT LIKE ? AND LOWER(nationalities.nationality) LIKE ?)"
+      career_conditions = "#{boolean_conditions} AND (LOWER(profiles.first_name) NOT LIKE ? AND LOWER(profiles.last_name) NOT LIKE ? AND LOWER(nationalities.nationality) NOT LIKE ? AND LOWER(academic_infos.carreer) LIKE ?)"
       query = '%' + params[:query].downcase + '%'
       #logger.debug "[API] Where query: #{query}"
-      results_by_name = User.joins(:profile).where(name_conditions, query, query)
-      results_by_city = User.joins(profile: [:city]).where(city_conditions, query, query, query)
-      results_by_nationality = User.joins(profile: [:city, :nationality]).where(nationality_conditions, query, query, query)
-      results_by_career = User.joins(:academic_info, profile: [:city, :nationality]).where(career_conditions, query, query, query, query)
+      approved_state = true
+      banned_state = false
+      results_by_name = User.joins(:profile).where(name_conditions, approved_state, banned_state, query, query)
+      results_by_city = User.joins(profile: [:city]).where(city_conditions, approved_state, banned_state, query, query, query)
+      results_by_nationality = User.joins(profile: [:city, :nationality]).where(nationality_conditions, approved_state, banned_state, query, query, query)
+      results_by_career = User.joins(:academic_info, profile: [:city, :nationality]).where(career_conditions, approved_state, banned_state, query, query, query, query)
     end
 
     @users_by_name = user_results_by_name(user, results_by_name)

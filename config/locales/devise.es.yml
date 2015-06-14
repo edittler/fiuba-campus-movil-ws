@@ -13,6 +13,7 @@ es:
       locked: "Su cuenta ha sido bloqueada."
       last_attempt: "Tiene un último intento antes de que su cuenta sea bloqueada."
       not_approved: "Su cuenta no ha sido aprobado por un administrador todavía."
+      banned: "Su cuenta ha sido suspendida por un administrador."
       not_found_in_database: "Correo o contraseña inválidos."
       timeout: "Su sesión ha expirado, por favor inicie sesión nuevamente para continuar."
       unauthenticated: "Necesita iniciar sesión o registrarse para continuar."
