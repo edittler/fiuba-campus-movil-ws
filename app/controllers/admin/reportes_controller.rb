@@ -80,15 +80,18 @@ class Admin::ReportesController < ApplicationController
     @comments = Comment.where("created_at >= :initialDate AND created_at <= :finalDate", 
                                             {initialDate:  Date.parse(@initialDate), finalDate: Date.parse(@finalDate)})
 
+     # Ordenamos las discusiones segun la cantidad de comentarios
+     @allDiscussions = Discussion.all
+     @allDiscussions = @allDiscussions.sort_by{ |d| [-d.comments.size] }
+
     # Filtramos las discusiones que no tengan comentarios en el rango de fechas
-    @allDiscussions = Discussion.all
     @discussions = Array.new
     @allDiscussions.each do |discussion|
       discussionComments = discussion.comments.where("created_at >= :initialDate AND created_at <= :finalDate", 
                                             {initialDate:  Date.parse(@initialDate), finalDate: Date.parse(@finalDate)})
       if (discussionComments.size > 0)
-        @discussions.push discussion              
-      end      
+        @discussions.push discussion                    
+      end       
     end
 
     # Si no hay discusiones que cumplan, no mostramos el grafico ni la tabla
@@ -96,7 +99,7 @@ class Admin::ReportesController < ApplicationController
       @userResponseMessage = "No hay discusiones para mostrar en el rango de fechas"
       render "chart_foros"
       return
-    end  
+    end    
     
     # Inicializo a todas las discusiones en 0
     @discussionsActivity = Hash[@discussions.map {|v| [v, 0]}]
@@ -109,10 +112,34 @@ class Admin::ReportesController < ApplicationController
     @discussionsActivityArray = @discussionsActivity.to_a
 
     # Me guardo en un array los nombres de cada discusion
-    @discussionNames = Array.new
+    @discussionNamesAux = Array.new
     @discussions.each do |discussion|
-      @discussionNames.push (discussion.subject + "-" + discussion.forum.group.name)
-    end    
+      @discussionNamesAux.push (discussion.subject + "-" + discussion.forum.group.name)
+    end 
+
+    # Solo mostramos una determinada cantidad de discusiones
+    commentaryMaxCount = 8  # Numero maximo de discusiones mostradas
+    showedDiscussions = 0
+    @discussionNames = Array.new
+    @discussionNamesAux.each do |item|
+       if (showedDiscussions < commentaryMaxCount)
+          @discussionNames.push item
+          showedDiscussions += 1
+       else
+         break
+       end   
+     end
+     showedDiscussions = 0
+     @discussionValues = Array.new
+     @discussionsActivity.each do |item|
+       if (showedDiscussions < commentaryMaxCount)
+          @discussionValues.push item
+          showedDiscussions += 1
+       else
+         break
+       end   
+     end
+    
     
     @chart_foros = LazyHighCharts::HighChart.new('column') do |f|
           f.chart({
@@ -121,8 +148,8 @@ class Admin::ReportesController < ApplicationController
             })
           series = {
             :type => 'column',
-            :name => 'Comentarios por discusión',
-            :data => @discussionsActivityArray
+            :name => '<br><br><br><br>Comentarios por discusión',
+            :data => @discussionValues
           }
           xAxis = {
             :categories => @discussionNames
