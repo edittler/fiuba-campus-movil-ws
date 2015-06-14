@@ -62,28 +62,40 @@ class Admin::ReportesController < ApplicationController
   end
 
   def chart_foros
+    @userResponseMessage = ""
+
     #Buscamos si tengo los parametros de fechas    
     if (params[:initialDate].nil? or params[:finalDate].nil?)    
       @initialDate = "01/01/2015"   
-      @finalDate = "01/12/2015"
+      @finalDate = "01/12/2015"      
     else      
       @initialDate = params[:initialDate]  
-      @finalDate = params[:finalDate]   
+      @finalDate = params[:finalDate]  
+      if not validateDateRange
+        return
+      end
     end  
 
     # Filtramos los comentarios por fecha
     @comments = Comment.where("created_at >= :initialDate AND created_at <= :finalDate", 
-                                            {initialDate:  @initialDate, finalDate: @finalDate})
+                                            {initialDate:  Date.parse(@initialDate), finalDate: Date.parse(@finalDate)})
 
     # Filtramos las discusiones que no tengan comentarios en el rango de fechas
     @allDiscussions = Discussion.all
     @discussions = Array.new
     @allDiscussions.each do |discussion|
       discussionComments = discussion.comments.where("created_at >= :initialDate AND created_at <= :finalDate", 
-                                            {initialDate:  @initialDate, finalDate: @finalDate})
+                                            {initialDate:  Date.parse(@initialDate), finalDate: Date.parse(@finalDate)})
       if (discussionComments.size > 0)
         @discussions.push discussion              
       end      
+    end
+
+    # Si no hay discusiones que cumplan, no mostramos el grafico ni la tabla
+    if @discussions.size == 0
+      @userResponseMessage = "No hay discusiones para mostrar en el rango de fechas"
+      render "chart_foros"
+      return
     end  
     
     # Inicializo a todas las discusiones en 0
@@ -147,4 +159,21 @@ class Admin::ReportesController < ApplicationController
 
   end
 
+  private
+    def validateDateRange
+      begin
+         parsedInitialDate = Date.parse(params[:initialDate])
+         parsedFinalDate = Date.parse(params[:finalDate])
+         if parsedInitialDate > parsedFinalDate
+            @userResponseMessage = "La fecha de inicio no puede ser mayor a la fecha de fin"
+            render "chart_foros"
+            return false
+         end
+      rescue ArgumentError
+         @userResponseMessage = "Revise el formato de las fechas. El mismo debería ser dd/mm/aaaa."
+         render "chart_foros"
+         return false
+      end   
+      return true
+    end
 end

@@ -9,6 +9,7 @@
 	</table>
 </form> 
 
+<% if @userResponseMessage.length == 0 %>
 <table>
 	<tr>		
 		<td>
@@ -35,3 +36,6 @@
 		</td>
 	</tr>
 </table>
+<% else %>
+	<%= @userResponseMessage %>
+<% end %>
