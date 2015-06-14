@@ -135,6 +135,9 @@ class Admin::ReportesController < ApplicationController
               }
             }
           })
+          f.exporting({
+            enabled: false
+          })
     end
 
     render "chart_foros"
