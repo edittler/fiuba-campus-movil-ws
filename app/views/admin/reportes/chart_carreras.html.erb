@@ -9,7 +9,25 @@
 	</div>
 </div>
 <div class="row" id="stats-carreras">
-	<div class="small-12 columns">
+	<div class="small-8 columns">
 		<%= high_chart("chart-carreras", @chart_carreras) %>
+	</div>
+	<div class="small-4 columns" id="table-carreras" style="margin-top:50px;">
+		<table>
+			<tr>
+				<th>Carrera</th>
+				<th>Cantidad</th>
+			</tr>
+			<% @careers_count.each do |career, count| %>
+				<tr>
+					<td><%= career %></td>
+					<td class="text-center"><%= count %></td>
+				</tr>
+			<% end %>
+			<tr>
+				<td><b>Total</b></td>
+				<td class="text-center"><b><%= @total_users %></b></td>
+			</tr>
+		</table>
 	</div>
 </div>

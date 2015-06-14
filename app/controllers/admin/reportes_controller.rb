@@ -5,64 +5,60 @@ class Admin::ReportesController < ApplicationController
   before_filter :authenticate_admin!
   
   def chart_carreras
-    @approved_users = User.all
-
-    # Consigo todas las carreras ( select distinct )
-    @careers_name = AcademicInfo.uniq.pluck(:carreer)
+    @careers_count = User.joins(:academic_info)
+                         .where(approved: true)
+                         .group("academic_infos.carreer")
+                         .count
 
     # Reemplazo el nombre nil por Desconocido
     unknown_career = "Desconocido"
-    if @careers_name.include?(nil)
-      nil_index = @careers_name.index(nil)
-      @careers_name[nil_index] = unknown_career
+    if @careers_count.has_key?(nil)
+      @careers_count[unknown_career] = @careers_count[nil]
+      @careers_count.delete(nil)
     end
-    logger.debug "[REPORTS] Careers name: #{@carreers_name}"
+    logger.debug "[REPORTS] Careers count: #{@careers_count.inspect}"
 
-    @total_numer_of_approved_users = @approved_users.size
+    @careers = @careers_count.to_a
+    logger.debug "[REPORTS] Careers: #{@careers}"
 
-    # Inicializo a todas las carreras en 0
-    @careers = Hash[@careers_name.map {|v| [v, 0]}]
-
-    #itero por todos los usuarios registrados y voy contando las carreras
-    @approved_users.each do |user|
-      career_name = user.academic_info.carreer || unknown_career
-      @careers[career_name] += 1/Float( @careers_name.size)
-    end
-
-    @careers = @careers.to_a
+    @total_users = @careers_count.values.inject{|sum,x| sum + x }
+    logger.debug "[REPORTS] Total users: #{@total_users}"
 
     @chart_carreras = LazyHighCharts::HighChart.new('pie') do |f|
           f.chart({
             :defaultSeriesType =>"pie",
-            :margin => [50, 200, 60, 170]
+            :margin => [50, 100, 50, 100]
             })
-          series = {
+          f.series({
             :type => 'pie',
-            :name => 'carreras',
+            :name => 'Alumnos',
             :data => @careers
-          }
-          f.series(series)
-          f.options[:title][:text] = "Carreras de alumnos registrados"
-          f.legend(:layout=> 'vertical', :style => {
-            :left => 'auto',
-            :bottom => 'auto',
-            :right => '50px',
-            :top=> '100px'
             })
-          f.plot_options(:pie => {
-            :allowPointSelect => true,
-            :cursor => "pointer",
-            :dataLabels => {
-              :enabled=>true,
-              :color=>"black",
-              :style => {
-                :font => "13px Trebuchet MS, Verdana, sans-serif"
+          f.options[:title][:text] = "Carreras de alumnos registrados"
+          f.legend(
+            :layout=> 'vertical',
+            :style => {
+              :left => 'auto',
+              :bottom => 'auto',
+              :right => '50px',
+              :top=> '100px'
+            })
+          f.plot_options(
+            :pie => {
+              :allowPointSelect => true,
+              :cursor => "pointer",
+              :dataLabels => {
+                :enabled=>true,
+                :color=>"black",
+                :style => {
+                  :font => "13px Trebuchet MS, Verdana, sans-serif"
+                }
               }
-            }
-          })
+            })
+          f.exporting({
+              enabled: false
+            })
     end
-
-    render "chart_carreras"
   end
 
   def chart_foros
