@@ -66,13 +66,34 @@ class Admin::ReportesController < ApplicationController
   end
 
   def chart_foros
-    @discussions = Discussion.all    
-    @comments = Comment.all
+    #Buscamos si tengo los parametros de fechas    
+    if (params[:initialDate].nil? or params[:finalDate].nil?)    
+      @initialDate = "01/01/2015"   
+      @finalDate = "01/12/2015"
+    else      
+      @initialDate = params[:initialDate]  
+      @finalDate = params[:finalDate]   
+    end  
 
+    # Filtramos los comentarios por fecha
+    @comments = Comment.where("created_at >= :initialDate AND created_at <= :finalDate", 
+                                            {initialDate:  @initialDate, finalDate: @finalDate})
+
+    # Filtramos las discusiones que no tengan comentarios en el rango de fechas
+    @allDiscussions = Discussion.all
+    @discussions = Array.new
+    @allDiscussions.each do |discussion|
+      discussionComments = discussion.comments.where("created_at >= :initialDate AND created_at <= :finalDate", 
+                                            {initialDate:  @initialDate, finalDate: @finalDate})
+      if (discussionComments.size > 0)
+        @discussions.push discussion              
+      end      
+    end  
+    
     # Inicializo a todas las discusiones en 0
     @discussionsActivity = Hash[@discussions.map {|v| [v, 0]}]
 
-    # Itero por todos los comentarios y voy contando las discusiones
+    # Itero por todos los comentarios y voy contando para cada discusion
     @comments.each do |comment|
       discussion = comment.discussion
       @discussionsActivity[discussion] += 1

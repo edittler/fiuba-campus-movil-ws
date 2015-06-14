@@ -1,10 +1,22 @@
+<!-- Colocamos el form para seleccionar el rango de fechas -->
+<form action="chart_foros">
+	<table>
+		<tr>
+			<td>Fecha desde: <input type="text" name="initialDate" value=<%=@initialDate%>></td>
+			<td>Fecha hasta: <input type="text" name="finalDate" value=<%=@finalDate%>></td>
+			<td><input type="submit" value="Submit"></td>
+		</tr>
+	</table>
+</form> 
+
+<!-- Colocamos el gráfico -->
 <%= high_chart("my_id", @chart_foros) %>
 
+<!-- Colocamos la tabla -->
 <table>
 <tr>
 	<td>Grupo</td><td>Cantidad de<br>integrantes</td><td>Foro</td><td>Comentarios</td>
 </tr>
-
 
 <% @discussions.each do |discussion| %>
     <tr>
