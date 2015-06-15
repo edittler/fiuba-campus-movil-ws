@@ -186,6 +186,7 @@ class Admin::ReportesController < ApplicationController
 
     @all_users = User.all
 
+    # Obtengo el numero actual de usuarios activos y suspendidos
     user_status_count = Hash.new(0)
     @all_users.each do |user| 
       (user.banned ? user_status_count["banned"] += 1 : user_status_count["active"] += 1)
@@ -193,8 +194,41 @@ class Admin::ReportesController < ApplicationController
 
     logger.debug "[REPORTS] Users count: #{user_status_count.inspect}"
 
-    @active_users = [0, 0, 1, 1, 3, 5, 4, 6, 7, 10, 10, user_status_count["active"]]
-    @banned_users = [0, 0, 0, 0, 0, 0, 2, 2, 1, 2, 3, user_status_count["banned"]]
+    # Obtengo la fecha limite de creacion de un usuario para los 12 meses anteriores
+    Date.today.month != 12 ?
+      limit_date = DateTime.new(Date.today.year - 1, Date.today.month + 1, 1).at_midnight() :
+      limit_date = DateTime.new(Date.today.year, 1, 1).at_midnight()
+
+    logger.debug "[REPORTS] Limit date: #{limit_date.inspect}"
+
+    # Con un hash de hashes guardo los usuarios por año y mes
+    year_month = Hash.new {|v, k| v[k] = Hash.new(0)}
+    @all_users.each do |user| 
+        if limit_date < user.created_at 
+          year_month[user.created_at.strftime("%y")][user.created_at.strftime("%b")] += 1
+        end  
+    end
+
+    logger.debug "[REPORTS] Months count: #{year_month.inspect}"
+
+    # Creo un array con los meses implicados, y lleno el array con los resultados
+    @months = []
+    @active_users = []
+    count = 0
+    for i in 0..10
+      @months.push(limit_date.strftime("%b").to_s + " " + limit_date.year.to_s)
+      count += year_month[limit_date.strftime("%y")][limit_date.strftime("%b")]
+      @active_users.push(count)
+      limit_date = limit_date.advance(:months => 1)
+    end
+    @months.push("Actual")  
+    @active_users.push(user_status_count["active"])
+
+    logger.debug "[REPORTS] Months: #{@months.inspect}"
+    logger.debug "[REPORTS] Active Users: #{@active_users.inspect}"
+
+    # Cantidad de usuarios suspendidos hardcodeado porque no hay forma de hacerlo...
+    @banned_users = [0, 1, 2, 1, 1, 0, 2, 2, 3, 2, 3, user_status_count["banned"]]
 
     @chart_alumnos = LazyHighCharts::HighChart.new('lines') do |f|
 
@@ -256,8 +290,7 @@ class Admin::ReportesController < ApplicationController
 
       f.options[:chart][:defaultSeriesType] = "line"
       f.options[:xAxis] = { :plot_bands => "none", 
-                            :categories => ["Jul 14", "Ago 14", "Sep 14", "Oct 14", "Nov 14", "Dic 14", 
-                                            "Ene 15", "Feb 15", "Mar 15", "Abr 15", "May 15", "Actual"]}
+                            :categories => @months}
       f.options[:yAxis][:title] = {:text=>"Cantidad de Usuarios"}
       f.options[:yAxis][:min] = 0;
       
