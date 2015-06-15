@@ -1,6 +1,20 @@
 <h1>Detalle de Usuario</h1>
 <p><b>Correo electrónico:</b> <%= @user.email %></p>
-<p><b>Ultima conexión:</b> <%= @user.last_sign_in_at%></p>
+<p><b>Aprobado:</b> <%= @user.approved %></p>
+<p><b>Suspendido:</b> <%= @user.banned %></p>
+<p><b>Registrado:</b> <%= @user.created_at %></p>
+<p><b>Ultima conexión:</b> <%= @user.last_sign_in_at %></p>
 
-<%= link_to 'Regresar a usuarios', admin_users_path %> |
-<%= link_to 'Editar usuario', edit_admin_user_path(@user) %>
+<h2>Perfil</h2>
+<p><b>Nombres:</b> <%= @user.profile.first_name %></p>
+<p><b>Apellidos:</b> <%= @user.profile.last_name %></p>
+<p><b>Nacionalidad:</b> <%= @user.profile.nationality.nationality %></p>
+<p><b>Ciudad:</b> <%= @user.profile.city.name %></p>
+<p><b>Teléfono:</b> <%= @user.profile.phone.number %></p>
+
+<h2>Información Académica</h2>
+<p><b>Padrón:</b> <%= @user.academic_info.padron %></p>
+<p><b>Carrera:</b> <%= @user.academic_info.carreer %></p>
+
+
+<%= link_to 'Regresar a usuarios', admin_users_path %>
