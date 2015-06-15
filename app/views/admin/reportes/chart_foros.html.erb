@@ -1,41 +1,58 @@
-<!-- Colocamos el form para seleccionar el rango de fechas -->
-<form action="chart_foros">
-	<table>
-		<tr>
-			<td>Fecha desde: <input type="text" name="initialDate" value=<%=@initialDate%>></td>
-			<td>Fecha hasta: <input type="text" name="finalDate" value=<%=@finalDate%>></td>
-			<td><input type="submit" value="Submit"></td>
-		</tr>
-	</table>
-</form> 
-
-<% if @userResponseMessage.length == 0 %>
-<table>
-	<tr>		
-		<td>
-			<!-- Colocamos la tabla -->
+<div class="row">
+	<div class="small-8 columns">
+		<!-- Colocamos el form para seleccionar el rango de fechas -->
+		<form action="chart_foros">
 			<table>
 				<tr>
-					<td><b>Grupo</b></td><td><b>Cantidad de integrantes</b></td><td><b>Foro</b></td><td><b>Comentarios</b></td>
+					<td>
+						Fecha desde:
+						<input type="text" name="initialDate" value=<%= @initialDate %>>
+					</td>
+					<td>
+						Fecha hasta:
+						<input type="text" name="finalDate" value=<%= @finalDate %>>
+					</td>
+					<td>
+						<input type="submit" value="Actualizar">
+					</td>
 				</tr>
+			</table>
+		</form>
+	</div>
+	<div class="small-4 columns">
+		<h6>
+			<b>Exportar: </b>
+			<a class="button-export" id="export-foros-to-pdf" href="#">PDF</a>
+		</h6>
+	</div>
+</div>
 
+<div class="row">
+	<% if @userResponseMessage.length == 0 %>
+		<div class="small-4 columns" id="table-foros">
+			<table>
+				<tr>
+					<th>Grupo</th>
+					<th>Cant.<br />integrantes</th>
+					<th>Discusión</th>
+					<th>Cant.<br />comentarios</th>
+				</tr>
 				<% @discussions.each do |discussion| %>
-				    <tr>
-					    <td><%= discussion.forum.group.name %></td>
-					    <td><%= discussion.forum.group.members.size %></td>
-					    <td><%= discussion.subject %></td>
-					    <td><%= @discussionsActivity[discussion] %></td>
-				    </tr>
+					<tr>
+						<td><%= discussion.forum.group.name %></td>
+						<td><%= discussion.forum.group.members.size %></td>
+						<td><%= discussion.subject %></td>
+						<td><%= @discussionsActivity[discussion] %></td>
+					</tr>
 				<% end %>
 			</table>
-		</td>
-
-		<td width="75%" valign="top">
-			<!-- Colocamos el gráfico -->
-			<%= high_chart("my_id", @chart_foros) %>
-		</td>
-	</tr>
-</table>
-<% else %>
-	<%= @userResponseMessage %>
-<% end %>
+		</div>
+		<div class="small-8 columns">
+			<%= high_chart("chart-foros", @chart_foros) %>
+		</div>
+	<% else %>
+		<div class="small-12 columns">
+			<%= @userResponseMessage %>
+		</div>
+	<% end %>
+</div>

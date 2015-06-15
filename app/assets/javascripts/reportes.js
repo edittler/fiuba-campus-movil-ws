@@ -88,4 +88,42 @@ $(function(){
 		doc.output("dataurlnewwindow");
 	}
 
+	$("#export-foros-to-pdf").on("click", exportForosToPDF);
+
+	function exportForosToPDF(event) {
+		var doc = new jsPDF();
+
+		// http://stackoverflow.com/questions/25630811/export-highcharts-to-pdf-using-javascript-and-local-server-no-internet-connec
+
+		// chart height defined here so each chart can be palced
+		// in a different position
+		var chartWidth = 120;
+		var chartHeight = 80;
+		var chartScale = 1.8;
+
+		$('#chart-foros').each(function (index) {
+			var imageData = $(this).highcharts().createCanvas();
+
+			// add image to doc, if you have lots of charts, you will need
+			// to check if you have gone bigger than a page and do
+			// doc.addPage() before adding another image.
+
+			//addImage(imagedata, type, x, y, width, height)
+			doc.addImage(
+				imageData,
+				'JPEG',
+				0,
+				(index * chartHeight * chartScale) + 10,
+				chartWidth * chartScale,
+				chartHeight * chartScale
+			);
+		});
+
+		doc.fromHTML($("#table-foros").get(0), 20, 160, {
+			'width': 150
+		});
+
+		doc.output("dataurlnewwindow");
+	}
+
 });
