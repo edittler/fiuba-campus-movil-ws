@@ -186,13 +186,15 @@ class Admin::ReportesController < ApplicationController
 
     @all_users = User.all
 
-    # Obtengo el numero actual de usuarios activos y suspendidos
-    user_status_count = Hash.new(0)
+    # Obtengo el numero actual de usuarios suspendidos
+    current_banned_users = 0
     @all_users.each do |user| 
-      (user.banned ? user_status_count["banned"] += 1 : user_status_count["active"] += 1)
+      if user.banned
+        current_banned_users += 1
+      end  
     end
 
-    logger.debug "[REPORTS] Users count: #{user_status_count.inspect}"
+    logger.debug "[REPORTS] Users count: #{current_banned_users.inspect}"
 
     # Obtengo la fecha limite de creacion de un usuario para los 12 meses anteriores
     Date.today.month != 12 ?
@@ -213,32 +215,30 @@ class Admin::ReportesController < ApplicationController
 
     # Creo un array con los meses implicados, y lleno el array con los resultados
     @months = []
-    @active_users = []
+    @total_per_month_users = []
     count = 0
     for i in 0..10
       @months.push(limit_date.strftime("%b").to_s + " " + limit_date.year.to_s)
       count += year_month[limit_date.strftime("%y")][limit_date.strftime("%b")]
-      @active_users.push(count)
+      @total_per_month_users.push(count)
       limit_date = limit_date.advance(:months => 1)
     end
     @months.push("Actual")  
-    @active_users.push(user_status_count["active"])
+    @total_per_month_users.push(@all_users.size)
 
     logger.debug "[REPORTS] Months: #{@months.inspect}"
-    logger.debug "[REPORTS] Active Users: #{@active_users.inspect}"
+    logger.debug "[REPORTS] Active Users: #{@total_per_month_users.inspect}"
 
     # Cantidad de usuarios suspendidos hardcodeado porque no hay forma de hacerlo...
-    @banned_users = [0, 1, 2, 1, 1, 0, 2, 2, 3, 2, 3, user_status_count["banned"]]
+    @banned_users = [0, 1, 2, 1, 1, 0, 2, 2, 3, 2, 3, current_banned_users]
 
     @chart_alumnos = LazyHighCharts::HighChart.new('lines') do |f|
 
       f.series( :name=>'Total de Usuarios',
-                :data=>[@active_users[0] + @banned_users[0], @active_users[1] + @banned_users[1], 
-                  @active_users[2] + @banned_users[2], @active_users[3] + @banned_users[3], 
-                  @active_users[4] + @banned_users[4], @active_users[5] + @banned_users[5], 
-                  @active_users[6] + @banned_users[6], @active_users[7] + @banned_users[7], 
-                  @active_users[8] + @banned_users[8], @active_users[9] + @banned_users[9], 
-                  @active_users[10] + @banned_users[10], @active_users[11] + @banned_users[11]], 
+                :data=>[@total_per_month_users[0], @total_per_month_users[1], @total_per_month_users[2], 
+                        @total_per_month_users[3], @total_per_month_users[4], @total_per_month_users[5], 
+                        @total_per_month_users[6], @total_per_month_users[7], @total_per_month_users[8], 
+                        @total_per_month_users[9], @total_per_month_users[10], @total_per_month_users[11]], 
                 :color=>"black",
                 :dataLabels => {
                   :enabled => true,
@@ -253,9 +253,12 @@ class Admin::ReportesController < ApplicationController
                 }) 
 
       f.series( :name=>'Usuarios Activos',
-                :data=>[@active_users[0], @active_users[1], @active_users[2], 
-                  @active_users[3], @active_users[4], @active_users[5], @active_users[6], @active_users[7], 
-                  @active_users[8], @active_users[9], @active_users[10], @active_users[11]], 
+                :data=>[@total_per_month_users[0] - @banned_users[0], @total_per_month_users[1] - @banned_users[1], 
+                        @total_per_month_users[2] - @banned_users[2], @total_per_month_users[3] - @banned_users[3], 
+                        @total_per_month_users[4] - @banned_users[4], @total_per_month_users[5] - @banned_users[5], 
+                        @total_per_month_users[6] - @banned_users[6], @total_per_month_users[7] - @banned_users[7], 
+                        @total_per_month_users[8] - @banned_users[8], @total_per_month_users[9] - @banned_users[9], 
+                        @total_per_month_users[10] - @banned_users[10], @total_per_month_users[11] - @banned_users[11]], 
                 :color=>"green",
                 :dataLabels => {
                   :enabled => true,
