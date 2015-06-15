@@ -1,1 +1,16 @@
-<%= high_chart("my_bar_div", @chart_alumnos) %>
+<div class="row">
+	<div class="small-8 columns">
+	</div>
+	<div class="small-4 columns">
+		<h6>
+			<b>Exportar: </b>
+			<a class="button-export" id="export-alumnos-to-pdf" href="#">PDF</a>
+		</h6>
+	</div>
+</div>
+
+<div class="row">
+	<div class="small-12 columns">
+		<%= high_chart("chart-alumnos", @chart_alumnos) %>
+	</div>
+</div>

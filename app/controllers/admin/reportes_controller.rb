@@ -64,21 +64,25 @@ class Admin::ReportesController < ApplicationController
   def chart_foros
     @userResponseMessage = ""
 
-    #Buscamos si tengo los parametros de fechas    
-    if (params[:initialDate].nil? or params[:finalDate].nil?)    
-      @initialDate = "01/01/2015"   
-      @finalDate = "01/12/2015"      
-    else      
-      @initialDate = params[:initialDate]  
-      @finalDate = params[:finalDate]  
+    #Buscamos si tengo los parametros de fechas
+    if (params[:initialDate].nil? or params[:finalDate].nil?)
+      @initialDate = "01/01/2015"
+      @finalDate = "01/12/2015"
+    else
+      @initialDate = params[:initialDate]
+      @finalDate = params[:finalDate]
       if not validateDateRange
         return
       end
     end  
 
     # Filtramos los comentarios por fecha
-    @comments = Comment.where("created_at >= :initialDate AND created_at <= :finalDate", 
-                                            {initialDate:  Date.parse(@initialDate), finalDate: Date.parse(@finalDate)})
+    @comments = Comment.where(
+      "created_at >= :initialDate AND created_at <= :finalDate", 
+      {
+        initialDate:  Date.parse(@initialDate),
+        finalDate: Date.parse(@finalDate)
+      })
 
      # Ordenamos las discusiones segun la cantidad de comentarios
      @allDiscussions = Discussion.all
@@ -87,11 +91,15 @@ class Admin::ReportesController < ApplicationController
     # Filtramos las discusiones que no tengan comentarios en el rango de fechas
     @discussions = Array.new
     @allDiscussions.each do |discussion|
-      discussionComments = discussion.comments.where("created_at >= :initialDate AND created_at <= :finalDate", 
-                                            {initialDate:  Date.parse(@initialDate), finalDate: Date.parse(@finalDate)})
+      discussionComments = discussion.comments.where(
+        "created_at >= :initialDate AND created_at <= :finalDate", 
+        {
+          initialDate: Date.parse(@initialDate),
+          finalDate: Date.parse(@finalDate)
+        })
       if (discussionComments.size > 0)
-        @discussions.push discussion                    
-      end       
+        @discussions.push discussion
+      end
     end
 
     # Si no hay discusiones que cumplan, no mostramos el grafico ni la tabla
@@ -99,8 +107,8 @@ class Admin::ReportesController < ApplicationController
       @userResponseMessage = "No hay discusiones para mostrar en el rango de fechas"
       render "chart_foros"
       return
-    end    
-    
+    end
+
     # Inicializo a todas las discusiones en 0
     @discussionsActivity = Hash[@discussions.map {|v| [v, 0]}]
 
@@ -115,7 +123,7 @@ class Admin::ReportesController < ApplicationController
     @discussionNamesAux = Array.new
     @discussions.each do |discussion|
       @discussionNamesAux.push (discussion.subject + "-" + discussion.forum.group.name)
-    end 
+    end
 
     # Solo mostramos una determinada cantidad de discusiones
     commentaryMaxCount = 8  # Numero maximo de discusiones mostradas
@@ -127,8 +135,9 @@ class Admin::ReportesController < ApplicationController
           showedDiscussions += 1
        else
          break
-       end   
+       end
      end
+
      showedDiscussions = 0
      @discussionValues = Array.new
      @discussionsActivity.each do |item|
@@ -137,46 +146,47 @@ class Admin::ReportesController < ApplicationController
           showedDiscussions += 1
        else
          break
-       end   
+       end
      end
-    
-    
+
     @chart_foros = LazyHighCharts::HighChart.new('column') do |f|
           f.chart({
             :defaultSeriesType =>"column",
             :margin => [50, 200, 60, 170]
             })
-          series = {
-            :type => 'column',
-            :name => '<br><br><br><br>Comentarios por discusión',
-            :data => @discussionValues
-          }
           xAxis = {
             :categories => @discussionNames
           }
           f.xAxis(xAxis)
-          f.series(series)
-          f.options[:title][:text] = "Foros con mayor cantidad de respuestas en el período elegido"
-          f.legend(:layout=> 'vertical', :style => {
-            :left => 'auto',
-            :bottom => 'auto',
-            :right => '50px',
-            :top=> '100px'
+          f.series({
+            :type => 'column',
+            :name => '<br><br><br><br>Comentarios por discusión',
+            :data => @discussionValues
             })
-          f.plot_options(:column => {
-            :allowPointSelect => true,
-            :cursor => "pointer",
-            :dataLabels => {
-              :enabled=>true,
-              :color=>"black",
-              :style => {
-                :font => "13px Trebuchet MS, Verdana, sans-serif"
+          f.options[:title][:text] = "Discusiones con mayor cantidad de respuestas en el período elegido"
+          f.legend(
+            :layout=> 'vertical',
+            :style => {
+              :left => 'auto',
+              :bottom => 'auto',
+              :right => '50px',
+              :top=> '100px'
+            })
+          f.plot_options(
+            :column => {
+              :allowPointSelect => true,
+              :cursor => "pointer",
+              :dataLabels => {
+                :enabled=>true,
+                :color=>"black",
+                :style => {
+                  :font => "13px Trebuchet MS, Verdana, sans-serif"
+                }
               }
-            }
-          })
+            })
           f.exporting({
             enabled: false
-          })
+            })
     end
 
     render "chart_foros"
@@ -188,10 +198,10 @@ class Admin::ReportesController < ApplicationController
 
     # Obtengo el numero actual de usuarios suspendidos
     current_banned_users = 0
-    @all_users.each do |user| 
+    @all_users.each do |user|
       if user.banned
         current_banned_users += 1
-      end  
+      end
     end
 
     logger.debug "[REPORTS] Users count: #{current_banned_users.inspect}"
@@ -208,7 +218,7 @@ class Admin::ReportesController < ApplicationController
     @all_users.each do |user| 
         if limit_date < user.created_at 
           year_month[user.created_at.strftime("%y")][user.created_at.strftime("%b")] += 1
-        end  
+        end
     end
 
     logger.debug "[REPORTS] Months count: #{year_month.inspect}"
@@ -223,7 +233,7 @@ class Admin::ReportesController < ApplicationController
       @total_per_month_users.push(count)
       limit_date = limit_date.advance(:months => 1)
     end
-    @months.push("Actual")  
+    @months.push("Actual")
     @total_per_month_users.push(@all_users.size)
 
     logger.debug "[REPORTS] Months: #{@months.inspect}"
@@ -233,7 +243,6 @@ class Admin::ReportesController < ApplicationController
     @banned_users = [0, 1, 2, 1, 1, 0, 2, 2, 3, 2, 3, current_banned_users]
 
     @chart_alumnos = LazyHighCharts::HighChart.new('lines') do |f|
-
       f.series( :name=>'Total de Usuarios',
                 :data=>[@total_per_month_users[0], @total_per_month_users[1], @total_per_month_users[2], 
                         @total_per_month_users[3], @total_per_month_users[4], @total_per_month_users[5], 
@@ -270,7 +279,7 @@ class Admin::ReportesController < ApplicationController
                   :style => {
                       :font => "12px Trebuchet MS, Verdana, sans-serif"
                   }
-                })     
+                })
 
       f.series( :name=>'Usuarios Suspendidos',
                 :data=>[@banned_users[0], @banned_users[1], @banned_users[2], 
@@ -307,6 +316,10 @@ class Admin::ReportesController < ApplicationController
         }
       })
 
+      f.exporting({
+        enabled: false
+        })
+
     end
 
     render "chart_alumnos"
@@ -317,19 +330,19 @@ class Admin::ReportesController < ApplicationController
 
     def validateDateRange
       begin
-         parsedInitialDate = Date.parse(params[:initialDate])
-         parsedFinalDate = Date.parse(params[:finalDate])
-         if parsedInitialDate > parsedFinalDate
-            @userResponseMessage = "La fecha de inicio no puede ser mayor a la fecha de fin"
-            render "chart_foros"
-            return false
-         end
+        parsedInitialDate = Date.parse(params[:initialDate])
+        parsedFinalDate = Date.parse(params[:finalDate])
+        if parsedInitialDate > parsedFinalDate
+          @userResponseMessage = "La fecha de inicio no puede ser mayor a la fecha de fin"
+          render "chart_foros"
+          return false
+        end
       rescue ArgumentError
-         @userResponseMessage = "Revise el formato de las fechas. El mismo debería ser dd/mm/aaaa."
-         render "chart_foros"
-         return false
-      end   
+        @userResponseMessage = "Revise el formato de las fechas. El mismo debería ser dd/mm/aaaa."
+        render "chart_foros"
+        return false
+      end
       return true
     end
-    
+
 end
