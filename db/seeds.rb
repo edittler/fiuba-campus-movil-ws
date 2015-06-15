@@ -6,7 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Admin.create(email: 'admin@fi.uba.ar', password: '12345678')
+#Admin.create(email: 'admin@fi.uba.ar', password: '12345678')
 
 ariel_alegre_hash = {
   user: {
