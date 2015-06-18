@@ -62,7 +62,7 @@ class Admin::ReportesController < ApplicationController
   end
 
   def chart_foros
-    showed_discussions_max_count = 8   # Numero maximo de discusiones mostradas    
+    showed_discussions_max_count = 10   # Numero maximo de discusiones mostradas    
     @userResponseMessage = ""
 
     #Buscamos si tengo los parametros de fechas
