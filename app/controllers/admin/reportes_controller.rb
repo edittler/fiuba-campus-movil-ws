@@ -125,11 +125,14 @@ class Admin::ReportesController < ApplicationController
     @discussionValues = @discussionsActivity.to_a
 
     # Me guardo en un array los nombres de cada discusion
+    i = 1
     @discussionNames = Array.new
     @discussions.each do |discussion|
-      @discussionNames.push (discussion.subject + "-" + discussion.forum.group.name)
-    end  
-    
+      #@discussionNames.push (discussion.subject + "-" + discussion.forum.group.name)
+      @discussionNames.push i
+      i += 1
+    end    
+
     @chart_foros = LazyHighCharts::HighChart.new('column') do |f|
           f.chart({
             :defaultSeriesType =>"column",
@@ -141,10 +144,10 @@ class Admin::ReportesController < ApplicationController
           f.xAxis(xAxis)
           f.series({
             :type => 'column',
-            :name => '<br><br><br><br>Comentarios por discusión',
+            :name => 'Comentarios por discusión',
             :data => @discussionValues
             })
-          f.options[:title][:text] = "Discusiones con mayor cantidad de respuestas en el período elegido"
+          f.options[:title][:text] = "Discusiones con mayor cantidad de respuestas entre " + @initialDate + " y " + @finalDate 
           f.legend(
             :layout=> 'vertical',
             :style => {

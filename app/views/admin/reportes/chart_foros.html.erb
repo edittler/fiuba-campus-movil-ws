@@ -32,18 +32,22 @@
 		<div class="small-4 columns" id="table-foros">
 			<table>
 				<tr>
+					<th>Numero</th>
 					<th>Grupo</th>
-					<th>Cant.<br />integrantes</th>
+					<th>Miembros</th>
 					<th>Discusión</th>
-					<th>Cant.<br />comentarios</th>
+					<th>Comentarios</th>
 				</tr>
+				<% i = 1 %>
 				<% @discussions.each do |discussion| %>
 					<tr>
+						<td><%= i %></td>
 						<td><%= discussion.forum.group.name %></td>
 						<td><%= discussion.forum.group.members.size %></td>
 						<td><%= discussion.subject %></td>
 						<td><%= @discussionsActivity[discussion] %></td>
 					</tr>
+					<% i += 1 %>
 				<% end %>
 			</table>
 		</div>
