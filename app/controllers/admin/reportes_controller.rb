@@ -118,6 +118,8 @@ class Admin::ReportesController < ApplicationController
     # Itero por todos los comentarios y voy contando para cada discusion
     @comments.each do |comment|
       discussion = comment.discussion
+      #@discussionsActivity[discussion] = 0 unless @discussionsActivity.has_key?(discussion)
+      #@discussionsActivity[discussion] += 1
       if not @discussionsActivity[discussion].nil?
           @discussionsActivity[discussion] += 1
       end
