@@ -10,6 +10,8 @@ class Admin::ReportesController < ApplicationController
                         .group("academic_infos.carreer")
                         .count
 
+    @total_users = careers_count.values.inject{|sum,x| sum + x }
+
     # Reemplazo el nombre nil por Desconocido
     unknown_career = "Desconocido"
     unknown_carrer_array = []
@@ -27,7 +29,6 @@ class Admin::ReportesController < ApplicationController
     end
     logger.debug "[REPORTS] Careers: #{@careers}"
 
-    @total_users = careers_count.values.inject{|sum,x| sum + x }
     logger.debug "[REPORTS] Total users: #{@total_users}"
 
     @chart_carreras = LazyHighCharts::HighChart.new('pie') do |f|
