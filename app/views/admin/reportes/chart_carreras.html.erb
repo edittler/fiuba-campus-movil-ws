@@ -18,10 +18,10 @@
 				<th>Carrera</th>
 				<th>Cantidad</th>
 			</tr>
-			<% @careers_count.each do |career, count| %>
+			<% @careers.each do |item| %>
 				<tr>
-					<td><%= career %></td>
-					<td class="text-center"><%= count %></td>
+					<td><%= item[0] %></td>
+					<td class="text-center"><%= item[1] %></td>
 				</tr>
 			<% end %>
 			<tr>

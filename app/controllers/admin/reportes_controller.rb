@@ -5,23 +5,29 @@ class Admin::ReportesController < ApplicationController
   before_filter :authenticate_admin!
   
   def chart_carreras
-    @careers_count = User.joins(:academic_info)
-                         .where(approved: true)
-                         .group("academic_infos.carreer")
-                         .count
+    careers_count = User.joins(:academic_info)
+                        .where(approved: true)
+                        .group("academic_infos.carreer")
+                        .count
 
     # Reemplazo el nombre nil por Desconocido
     unknown_career = "Desconocido"
-    if @careers_count.has_key?(nil)
-      @careers_count[unknown_career] = @careers_count[nil]
-      @careers_count.delete(nil)
+    unknown_carrer_array = []
+    if careers_count.has_key?(nil)
+      unknown_carrer_array[0] = unknown_career
+      unknown_carrer_array[1] = careers_count[nil]
+      careers_count.delete(nil)
     end
     logger.debug "[REPORTS] Careers count: #{@careers_count.inspect}"
 
-    @careers = @careers_count.to_a
+    @careers = careers_count.sort_by {|key, value| value}.reverse
+
+    unless unknown_carrer_array[0].nil?
+      @careers << unknown_carrer_array
+    end
     logger.debug "[REPORTS] Careers: #{@careers}"
 
-    @total_users = @careers_count.values.inject{|sum,x| sum + x }
+    @total_users = careers_count.values.inject{|sum,x| sum + x }
     logger.debug "[REPORTS] Total users: #{@total_users}"
 
     @chart_carreras = LazyHighCharts::HighChart.new('pie') do |f|
